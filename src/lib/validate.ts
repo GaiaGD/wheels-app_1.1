@@ -4,7 +4,7 @@ const bad = (message: string) => fail('bad_input', 'input', message)
 
 export function parseFlightNumber(input: string): Result<string> {
   const v = input.replace(/\s+/g, '').toUpperCase()
-  return /^[A-Z][A-Z0-9]\d{1,4}[A-Z]?$/.test(v) ? ok(v) : bad('Invalid flight number')
+  return /^(?:[A-Z][A-Z0-9]|[0-9][A-Z])\d{1,4}[A-Z]?$/.test(v) ? ok(v) : bad('Invalid flight number')
 }
 
 export function parseIata(input: string): Result<string> {
@@ -14,7 +14,7 @@ export function parseIata(input: string): Result<string> {
 
 export function parseAirlineCode(input: string): Result<string> {
   const v = input.trim().toUpperCase()
-  return /^[A-Z0-9]{2}$/.test(v) ? ok(v) : bad('Invalid airline code')
+  return /^(?:[A-Z][A-Z0-9]|[0-9][A-Z])$/.test(v) ? ok(v) : bad('Invalid airline code')
 }
 
 export function parseDate(input: string): Result<string> {
