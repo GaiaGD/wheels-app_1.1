@@ -1,0 +1,10 @@
+.form { display: grid; gap: 20px; width: 100%; max-width: 420px; margin: 0 auto; }
+.tabs { display: flex; gap: 8px; justify-content: center; }
+.tabs button { font: inherit; font-size: 13px; padding: 8px 14px; border: 1px solid var(--ink); border-radius: 999px; background: transparent; color: var(--ink); cursor: pointer; }
+.tabs button[aria-selected='true'] { background: var(--ink); color: var(--bg); }
+.fields { display: grid; gap: 22px; }
+.field { display: grid; gap: 4px; }
+.field label { font-size: 12px; }
+.field input { font: inherit; font-size: 15px; padding: 10px 0; border: 0; border-bottom: 1px solid #231f203a; background: transparent; color: var(--ink); text-align: center; }
+.hint { margin: 0; font-size: 11px; text-align: center; }
+.error { margin: 0; font-size: 12px; font-weight: 600; }
