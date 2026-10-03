@@ -3,6 +3,11 @@
 .photo { min-height: 130px; position: relative; background: var(--bg); }
 .info { display: flex; gap: 12px; padding: 14px; }
 .left, .right { flex: 1; min-width: 0; }
-.left h1, .right h1 { font-size: 35px; margin: 0; }
 .left p, .right p { margin: 2px 0; font-size: 12px; }
+.left .big, .right .big { font-size: 35px; font-weight: 400; line-height: 1.2; margin: 0; }
 .divider { border: 0; border-top: 1px solid var(--bg); margin: 10px 0; }
+
+@media (min-width: 900px) {
+  .arrival { flex-direction: column; }
+  .photo { min-height: 220px; }
+}
