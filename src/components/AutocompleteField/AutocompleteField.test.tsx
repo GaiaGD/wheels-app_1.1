@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { act, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { AutocompleteField } from './AutocompleteField'
@@ -55,5 +55,14 @@ describe('AutocompleteField', () => {
     await user.type(screen.getByRole('combobox'), 'jfk')
     await user.tab()
     expect(onSelect).toHaveBeenLastCalledWith('JFK')
+  })
+
+  it('does not reopen the list when a late fetch lands after blur', async () => {
+    const { user } = setup()
+    await user.type(screen.getByRole('combobox'), 'new')
+    await user.tab()
+    await act(async () => { await new Promise((r) => setTimeout(r, 350)) })
+    expect(screen.queryAllByRole('option')).toHaveLength(0)
+    expect(screen.getByRole('combobox')).toHaveAttribute('aria-expanded', 'false')
   })
 })

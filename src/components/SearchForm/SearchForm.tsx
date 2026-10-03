@@ -19,6 +19,14 @@ export function SearchForm() {
   const [date, setDate] = useState('')
   const [errors, setErrors] = useState<Errors>({})
 
+  function switchTab(next: Tab) {
+    setTab(next)
+    setErrors({})
+    setDep(null)
+    setArr(null)
+    setAirline(null)
+  }
+
   function submitRoute() {
     const next: Errors = {}
     if (!dep) next.dep = 'Choose a departure airport'
@@ -54,8 +62,8 @@ export function SearchForm() {
       }}
     >
       <div role="tablist" aria-label="Search type" className={styles.tabs}>
-        <button type="button" role="tab" aria-selected={tab === 'route'} onClick={() => { setTab('route'); setErrors({}) }}>By route</button>
-        <button type="button" role="tab" aria-selected={tab === 'number'} onClick={() => { setTab('number'); setErrors({}) }}>By flight number</button>
+        <button type="button" role="tab" aria-selected={tab === 'route'} onClick={() => switchTab('route')}>By route</button>
+        <button type="button" role="tab" aria-selected={tab === 'number'} onClick={() => switchTab('number')}>By flight number</button>
       </div>
 
       {tab === 'route' ? (

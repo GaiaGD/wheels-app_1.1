@@ -5,13 +5,14 @@ import styles from './FlightList.module.css'
 export function FlightList({ flights }: { flights: LiveFlightSummary[] }) {
   return (
     <ul className={styles.list}>
-      {flights.map((f) => {
+      {flights.map((f, index) => {
         const params = new URLSearchParams()
         if (f.depIata) params.set('dep', f.depIata)
         if (f.arrIata) params.set('arr', f.arrIata)
+        const query = params.toString()
         return (
-          <li key={f.flightIata}>
-            <Link href={`/flight/${f.flightIata}?${params.toString()}`}>
+          <li key={`${f.flightIata}-${index}`}>
+            <Link href={`/flight/${f.flightIata}${query ? `?${query}` : ''}`}>
               <strong>{f.flightIata}</strong>
               <span>{f.depIata ?? '—'} → {f.arrIata ?? '—'}</span>
             </Link>

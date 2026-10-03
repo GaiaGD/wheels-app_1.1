@@ -27,6 +27,19 @@ export function AutocompleteField({ label, endpoint, placeholder, onSelect, erro
   const [unavailable, setUnavailable] = useState(false)
   const skipFetch = useRef(false)
   const selected = useRef(false)
+  const focused = useRef(false)
+  const pending = useRef<{ timer: ReturnType<typeof setTimeout>; controller: AbortController } | null>(null)
+  const closeTimer = useRef<number | null>(null)
+
+  function cancelPending() {
+    if (pending.current) {
+      clearTimeout(pending.current.timer)
+      pending.current.controller.abort()
+      pending.current = null
+    }
+  }
+
+  useEffect(() => () => { if (closeTimer.current !== null) window.clearTimeout(closeTimer.current) }, [])
 
   useEffect(() => {
     if (skipFetch.current) {
@@ -36,6 +49,7 @@ export function AutocompleteField({ label, endpoint, placeholder, onSelect, erro
     if (text.trim().length < 2) {
       setItems([])
       setOpen(false)
+      setUnavailable(false)
       return
     }
     const controller = new AbortController()
@@ -43,20 +57,25 @@ export function AutocompleteField({ label, endpoint, placeholder, onSelect, erro
       try {
         const res = await fetch(`${endpoint}?q=${encodeURIComponent(text.trim())}`, { signal: controller.signal })
         if (!res.ok) throw new Error('bad status')
-        setItems(await res.json())
+        const data: unknown = await res.json()
+        if (!Array.isArray(data)) throw new Error('bad payload')
+        if (!focused.current) return
+        setItems(data as Suggestion[])
         setUnavailable(false)
         setOpen(true)
         setActive(-1)
       } catch (e) {
-        if ((e as Error).name !== 'AbortError') {
+        if ((e as Error).name !== 'AbortError' && focused.current) {
           setItems([])
           setUnavailable(true)
         }
       }
     }, 200)
+    pending.current = { timer, controller }
     return () => {
       clearTimeout(timer)
       controller.abort()
+      if (pending.current?.controller === controller) pending.current = null
     }
   }, [text, endpoint])
 
@@ -82,14 +101,30 @@ export function AutocompleteField({ label, endpoint, placeholder, onSelect, erro
       choose(items[active])
     } else if (e.key === 'Escape') {
       setOpen(false)
+      setActive(-1)
+    }
+  }
+
+  function acceptTypedCode(value: string) {
+    if (!selected.current && CODE_PATTERN[endpoint].test(value.trim())) {
+      onSelect(value.trim().toUpperCase())
+    }
+  }
+
+  function onFocus() {
+    focused.current = true
+    if (closeTimer.current !== null) {
+      window.clearTimeout(closeTimer.current)
+      closeTimer.current = null
     }
   }
 
   function onBlur() {
-    window.setTimeout(() => setOpen(false), 150)
-    if (!selected.current && CODE_PATTERN[endpoint].test(text.trim())) {
-      onSelect(text.trim().toUpperCase())
-    }
+    focused.current = false
+    cancelPending()
+    if (closeTimer.current !== null) window.clearTimeout(closeTimer.current)
+    closeTimer.current = window.setTimeout(() => { closeTimer.current = null; setOpen(false) }, 150)
+    acceptTypedCode(text)
   }
 
   return (
@@ -111,8 +146,11 @@ export function AutocompleteField({ label, endpoint, placeholder, onSelect, erro
           selected.current = false
           setText(e.target.value)
           onSelect(null)
+          // Accept a typed code immediately so the parent holds it before Enter/Search.
+          acceptTypedCode(e.target.value)
         }}
         onKeyDown={onKeyDown}
+        onFocus={onFocus}
         onBlur={onBlur}
       />
       <ul id={listId} role="listbox" className={styles.list} hidden={!(open && items.length > 0)}>
