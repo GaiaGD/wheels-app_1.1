@@ -20,17 +20,17 @@ export function AirportCard({ role, endpoint, photo, weather }: Props) {
   const showEstimate = estimated && estimated !== scheduled && delay !== null && Math.abs(delay) >= 5
 
   return (
-    <section className={`${styles.card} ${styles[role]}`} aria-label={role === 'departure' ? 'Departure' : 'Arrival'}>
+    <section className={`${styles.card} ${styles[role] ?? ''}`} aria-label={role === 'departure' ? 'Departure' : 'Arrival'}>
       <div className={styles.photo}>{photo}</div>
       <div className={styles.info}>
         <div className={styles.left}>
-          <h1>{code}</h1>
+          <p className={styles.big}>{code}</p>
           <p>{[a.city, a.countryCode].filter(Boolean).join(', ')}</p>
           <hr className={styles.divider} />
           {weather}
         </div>
         <div className={styles.right}>
-          <h1>{scheduled ?? <Unavailable />}</h1>
+          <p className={styles.big}>{scheduled ?? <Unavailable />}</p>
           {showEstimate && (
             <p>{endpoint.actualLocal ? 'Actual' : 'Estimated'}: {estimated}</p>
           )}

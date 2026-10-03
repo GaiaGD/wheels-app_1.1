@@ -1,11 +1,10 @@
 import Link from 'next/link'
+import { ErrorPanel } from '@/components/ErrorState/ErrorPanel'
 
 export default function NotFound() {
   return (
-    <main style={{ maxWidth: 480, margin: '0 auto', padding: '20vh 16px', textAlign: 'center', display: 'grid', gap: 16, justifyItems: 'center' }}>
-      <h1 style={{ fontSize: 28 }}>Page not found</h1>
-      <p style={{ fontSize: 15, margin: 0 }}>That page doesn’t exist.</p>
+    <ErrorPanel title="Page not found" body="That page doesn’t exist.">
       <Link href="/" className="button">Back to search</Link>
-    </main>
+    </ErrorPanel>
   )
 }

@@ -21,7 +21,7 @@ export function StatusBanner({ status, delayMinutes }: { status: FlightStatus; d
   const showDelay = status !== 'cancelled' && status !== 'diverted'
   const extra = showDelay ? delayText(delayMinutes) : null
   return (
-    <div role="status" className={`${styles.banner} ${styles[status]}`}>
+    <div role="status" className={`${styles.banner} ${styles[status] ?? ''}`}>
       <strong>{LABELS[status]}</strong>
       {extra && <span> · {extra}</span>}
     </div>

@@ -18,12 +18,13 @@ export function FlightPath({ progress, status, countdown, flightNumber, airline,
     <section className={styles.path} aria-label="Flight path">
       <div className={styles.code}>
         <p>{aircraft ?? 'FLIGHT'}</p>
-        <h2>{flightNumber}</h2>
-        {airline && <h3>{airline}</h3>}
+        <h1>{flightNumber}</h1>
+        {airline && <p>{airline}</p>}
       </div>
       <div className={styles.track}>
         <div className={styles.line} />
         {showPlane && (
+          // eslint-disable-next-line @next/next/no-img-element -- decorative/remote icon
           <img
             className={styles.plane}
             src="/plane-icon.svg"

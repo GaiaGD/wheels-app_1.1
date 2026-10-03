@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { userMessage } from '@/lib/messages'
 import type { ProviderError } from '@/lib/result'
-import styles from './ErrorState.module.css'
+import { ErrorPanel } from './ErrorPanel'
 
 export function ErrorState({ error, variant }: { error: ProviderError; variant?: 'unconfirmed' }) {
   const { title, body } =
@@ -12,10 +12,8 @@ export function ErrorState({ error, variant }: { error: ProviderError; variant?:
         }
       : userMessage(error)
   return (
-    <main className={styles.wrap}>
-      <h1>{title}</h1>
-      <p>{body}</p>
+    <ErrorPanel title={title} body={body}>
       <Link href="/" className="button">Search again</Link>
-    </main>
+    </ErrorPanel>
   )
 }
