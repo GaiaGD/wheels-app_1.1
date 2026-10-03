@@ -26,7 +26,15 @@ describe('searchLiveFlights', () => {
     ] })
     const res = await searchLiveFlights(q)
     expect(res).toEqual({ ok: true, data: [{ flightIata: 'AA100', airlineIata: 'AA', depIata: 'JFK', arrIata: 'LAX' }] })
-    expect((fetch as any).mock.calls[0][0]).toContain('dep_iata=JFK')
+    expect(String(vi.mocked(fetch).mock.calls[0][0])).toContain('dep_iata=JFK')
+  })
+
+  it('URL-encodes the API key', async () => {
+    vi.stubEnv('AIRLABS_API_KEY', 'a&b=c d')
+    stubFetch({ response: [{ flight_iata: 'AA100' }] })
+    await searchLiveFlights(q)
+    const url = String(vi.mocked(fetch).mock.calls[0][0])
+    expect(url).toContain('api_key=a%26b%3Dc%20d&')
   })
 
   it('returns not_found when no flights are airborne', async () => {

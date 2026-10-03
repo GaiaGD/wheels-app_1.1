@@ -45,9 +45,9 @@ describe('fetchJson', () => {
 
   it('returns bad_data for invalid JSON and for schema mismatches', async () => {
     vi.stubGlobal('fetch', vi.fn(reply('not json')))
-    expect((await fetchJson(base)) as any).toMatchObject({ ok: false, error: { kind: 'bad_data' } })
+    expect(await fetchJson(base)).toMatchObject({ ok: false, error: { kind: 'bad_data' } })
     vi.stubGlobal('fetch', vi.fn(reply('{"a":"x"}')))
-    expect((await fetchJson(base)) as any).toMatchObject({ ok: false, error: { kind: 'bad_data' } })
+    expect(await fetchJson(base)).toMatchObject({ ok: false, error: { kind: 'bad_data' } })
   })
 
   it('retries once on 5xx, then reports provider_down', async () => {

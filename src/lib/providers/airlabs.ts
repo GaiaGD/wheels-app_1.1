@@ -41,7 +41,7 @@ export async function searchLiveFlights(q: {
   if (!key.ok) return key
 
   const url =
-    `https://airlabs.co/api/v9/flights?api_key=${key.data}` +
+    `https://airlabs.co/api/v9/flights?api_key=${encodeURIComponent(key.data)}` +
     `&dep_iata=${dep.data}&arr_iata=${arr.data}&airline_iata=${airline.data}`
 
   const res = await fetchJson({ provider: PROVIDER, url, schema, revalidate: 60 })

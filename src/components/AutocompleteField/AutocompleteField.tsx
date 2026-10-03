@@ -46,12 +46,7 @@ export function AutocompleteField({ label, endpoint, placeholder, onSelect, erro
       skipFetch.current = false
       return
     }
-    if (text.trim().length < 2) {
-      setItems([])
-      setOpen(false)
-      setUnavailable(false)
-      return
-    }
+    if (text.trim().length < 2) return
     const controller = new AbortController()
     const timer = setTimeout(async () => {
       try {
@@ -146,6 +141,11 @@ export function AutocompleteField({ label, endpoint, placeholder, onSelect, erro
           selected.current = false
           setText(e.target.value)
           onSelect(null)
+          if (e.target.value.trim().length < 2) {
+            setItems([])
+            setOpen(false)
+            setUnavailable(false)
+          }
           // Accept a typed code immediately so the parent holds it before Enter/Search.
           acceptTypedCode(e.target.value)
         }}

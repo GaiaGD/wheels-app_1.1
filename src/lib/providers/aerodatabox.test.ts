@@ -55,10 +55,12 @@ describe('getFlightDetails', () => {
   it('sends the key in headers, not in the URL, and includes the date when given', async () => {
     stubFetch(sample)
     await getFlightDetails('AA100', { date: '2026-10-03' })
-    const [url, init] = (fetch as any).mock.calls[0]
+    const [input, init] = vi.mocked(fetch).mock.calls[0]
+    const url = String(input)
+    const headers = init?.headers as Record<string, string>
     expect(url).toContain('/flights/number/AA100/2026-10-03')
     expect(url).not.toContain('test-key')
-    expect(init.headers['X-RapidAPI-Key']).toBe('test-key')
+    expect(headers['X-RapidAPI-Key']).toBe('test-key')
   })
 
   it('rejects invalid input before calling the API', async () => {

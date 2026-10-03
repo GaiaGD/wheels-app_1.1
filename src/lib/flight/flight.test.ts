@@ -1,4 +1,3 @@
-// @vitest-environment node
 import { describe, expect, it } from 'vitest'
 import type { EndpointInfo, Flight } from './types'
 import { delayMinutes, formatDuration, localTime } from './time'
@@ -96,6 +95,19 @@ describe('pickFlight', () => {
   it('filters by local date when given', () => {
     expect(pickFlight([today, tomorrow], { date: '2026-10-04', now })).toBe(tomorrow)
     expect(pickFlight([today], { date: '2026-10-05', now })).toBeNull()
+  })
+  it('ranks candidates without a usable scheduled time last', () => {
+    const untimed = flight({ number: 'XX1', dep: ep('JFK', 'not a date') })
+    expect(pickFlight([untimed, today], { now })).toBe(today)
+  })
+  it('never guesses between several candidates that all lack a usable time', () => {
+    const a = flight({ number: 'XX1', dep: ep('JFK', 'bad') })
+    const b = flight({ number: 'XX2', dep: ep('JFK', 'worse') })
+    expect(pickFlight([a, b], { now })).toBeNull()
+    expect(pickFlight([a], { now })).toBe(a)
+  })
+  it('matches airports case-insensitively', () => {
+    expect(pickFlight([today], { dep: 'jfk', arr: 'lax', now })).toBe(today)
   })
   it('returns null for an empty list', () => expect(pickFlight([], { now })).toBeNull())
 })

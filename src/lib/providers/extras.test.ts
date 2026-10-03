@@ -46,10 +46,12 @@ describe('getAirportPhoto', () => {
     stubFetch({ results: [{ urls: { regular: 'https://img.test/a.jpg' } }] })
     const res = await getAirportPhoto('New York')
     expect(res).toEqual({ ok: true, data: 'https://img.test/a.jpg' })
-    const [url, init] = (fetch as any).mock.calls[0]
+    const [input, init] = vi.mocked(fetch).mock.calls[0]
+    const url = String(input)
+    const headers = init?.headers as Record<string, string>
     expect(url).toContain('query=New%20York')
     expect(url).not.toContain('u-key')
-    expect(init.headers.Authorization).toBe('Client-ID u-key')
+    expect(headers.Authorization).toBe('Client-ID u-key')
   })
   it('returns not_found when there are no results', async () => {
     stubFetch({ results: [] })
