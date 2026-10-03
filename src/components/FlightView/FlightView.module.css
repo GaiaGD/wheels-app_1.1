@@ -1,0 +1,4 @@
+.page { max-width: 600px; margin: 0 auto; padding: 16px; display: grid; gap: 16px; }
+.banner { display: flex; justify-content: center; }
+.grid { display: grid; gap: 16px; }
+.back { justify-self: center; }

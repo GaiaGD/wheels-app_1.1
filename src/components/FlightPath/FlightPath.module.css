@@ -1,0 +1,9 @@
+.path { display: grid; gap: 8px; text-align: center; padding: 8px 12px; }
+.code p, .code h2, .code h3 { margin: 0; }
+.code h2 { font-size: 25px; }
+.track { position: relative; width: 95%; margin: 14px auto; height: 20px; }
+.line { position: absolute; top: 10px; left: 0; right: 0; border-bottom: 1px dashed var(--ink); }
+.plane { position: absolute; top: 0; height: 20px; width: 20px; left: var(--progress, 0%); transform: translateX(-50%); animation: fly 2.5s ease-out; }
+.countdown { margin: 0; font-size: 13px; }
+@keyframes fly { from { left: 0%; } }
+@media (prefers-reduced-motion: reduce) { .plane { animation: none; } }

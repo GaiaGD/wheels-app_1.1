@@ -1,0 +1,8 @@
+.card { display: flex; flex-direction: column; border-radius: var(--radius); background: var(--card); box-shadow: var(--shadow); overflow: hidden; }
+.arrival { flex-direction: column-reverse; }
+.photo { min-height: 130px; position: relative; background: var(--bg); }
+.info { display: flex; gap: 12px; padding: 14px; }
+.left, .right { flex: 1; min-width: 0; }
+.left h1, .right h1 { font-size: 35px; margin: 0; }
+.left p, .right p { margin: 2px 0; font-size: 12px; }
+.divider { border: 0; border-top: 1px solid var(--bg); margin: 10px 0; }
