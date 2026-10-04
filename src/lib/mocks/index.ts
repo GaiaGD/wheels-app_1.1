@@ -1,5 +1,5 @@
 import { fail, ok, type Result } from '../result'
-import type { AirportInfo, EndpointInfo, Flight, LiveFlightSummary } from '../flight/types'
+import type { AirportInfo, EndpointInfo, Flight, RouteFlight } from '../flight/types'
 
 const airport = (iata: string, icao: string, name: string, city: string, countryCode: string, lat: number, lon: number): AirportInfo =>
   ({ iata, icao, name, city, countryCode, lat, lon })
@@ -77,11 +77,11 @@ export function mockFlightDetails(number: string, now: Date): Result<Flight[]> {
   return spec ? ok([build(spec, now)]) : fail('not_found', 'mock', 'No such mock flight')
 }
 
-export function mockLiveFlights(dep: string, arr: string, airline: string): Result<LiveFlightSummary[]> {
+export function mockRouteFlights(dep: string, arr: string, airline: string): Result<RouteFlight[]> {
   if (dep === 'JFK' && arr === 'LAX' && airline === 'AA') {
     return ok([
-      { flightIata: 'AA100', airlineIata: 'AA', depIata: 'JFK', arrIata: 'LAX' },
-      { flightIata: 'AA2', airlineIata: 'AA', depIata: 'JFK', arrIata: 'LAX' },
+      { flightIata: 'AA100', airlineIata: 'AA', depIata: 'JFK', arrIata: 'LAX', departureLocal: '2026-10-03 08:00-04:00', status: 'EnRoute' },
+      { flightIata: 'AA2', airlineIata: 'AA', depIata: 'JFK', arrIata: 'LAX', departureLocal: '2026-10-03 09:30-04:00', status: 'EnRoute' },
     ])
   }
   return fail('not_found', 'mock', 'No mock flights')

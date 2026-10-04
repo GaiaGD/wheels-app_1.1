@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { deriveStatus } from '@/lib/flight/status'
-import { mockFlightDetails, mockLiveFlights } from './index'
+import { mockFlightDetails, mockRouteFlights } from './index'
 
 const now = new Date('2026-10-03T12:00:00Z')
 
@@ -27,11 +27,12 @@ describe('mockFlightDetails', () => {
   })
 })
 
-describe('mockLiveFlights', () => {
+describe('mockRouteFlights', () => {
   it('returns two flights for JFK-LAX-AA and not_found otherwise', () => {
-    const hit = mockLiveFlights('JFK', 'LAX', 'AA')
+    const hit = mockRouteFlights('JFK', 'LAX', 'AA')
     expect(hit.ok && hit.data.map((f) => f.flightIata)).toEqual(['AA100', 'AA2'])
-    const miss = mockLiveFlights('JFK', 'LAX', 'BA')
+    expect(hit.ok && hit.data[0]).toMatchObject({ departureLocal: '2026-10-03 08:00-04:00', status: 'EnRoute' })
+    const miss = mockRouteFlights('JFK', 'LAX', 'BA')
     expect(miss.ok === false && miss.error.kind).toBe('not_found')
   })
 })
