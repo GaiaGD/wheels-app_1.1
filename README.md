@@ -18,8 +18,7 @@ Mock mode is opt-in (`.env.example` defaults to `USE_MOCK_DATA=false`). Run `USE
 
 | Variable | Service |
 |---|---|
-| `AIRLABS_API_KEY` | AirLabs: live flights on a route |
-| `RAPIDAPI_KEY` | AeroDataBox via RapidAPI: flight details for any date |
+| `RAPIDAPI_KEY` | AeroDataBox via RapidAPI: flight details for any date (also route search) |
 | `OPENWEATHER_API_KEY` | OpenWeatherMap |
 | `UNSPLASH_ACCESS_KEY` | Unsplash |
 
@@ -35,4 +34,4 @@ Every provider call returns data or a typed error (`bad_input`, `not_found`, `ra
 
 ## Notes
 
-AeroDataBox's date range depends on your RapidAPI plan (date range not yet verified against a live key). Route search uses AirLabs and only finds flights that are in the air right now.
+AeroDataBox's date range depends on your RapidAPI plan (date range not yet verified against a live key). Route search lists the departure board of the departure airport (AeroDataBox) for the last 24 hours, filtered by arrival airport and airline; it does not show upcoming flights (search by flight number for those). Each route search uses 3 API calls (2 boards + 1 airport-time lookup), cached for 60 s / 1 h.
