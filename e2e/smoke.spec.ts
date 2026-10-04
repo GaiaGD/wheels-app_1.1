@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test'
 
 test('route search → pick a flight → flight page', async ({ page }) => {
   await page.goto('/search?dep=JFK&arr=LAX&airline=AA')
-  await expect(page.getByRole('heading', { name: /2 flights in the air/i })).toBeVisible()
+  await expect(page.getByRole('heading', { name: /2 flights found/i })).toBeVisible()
   await page.getByRole('link', { name: /AA100/ }).click()
   await expect(page).toHaveURL(/\/flight\/AA100/)
   await expect(page.getByRole('status')).toContainText('In the air')

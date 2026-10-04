@@ -71,7 +71,7 @@ export function SearchForm() {
           <AutocompleteField label="Departure airport" endpoint="/api/airports" placeholder="From (city or code)" onSelect={setDep} error={errors.dep} />
           <AutocompleteField label="Arrival airport" endpoint="/api/airports" placeholder="To (city or code)" onSelect={setArr} error={errors.arr} />
           <AutocompleteField label="Airline" endpoint="/api/airlines" placeholder="Airline (name or code)" onSelect={setAirline} error={errors.airline} />
-          <p className={styles.hint}>Route search shows flights that are in the air right now.</p>
+          <p className={styles.hint}>Shows flights that departed in the last 24 hours. For upcoming flights, search by flight number.</p>
         </div>
       ) : (
         <div role="tabpanel" className={styles.fields}>

@@ -1,8 +1,10 @@
 import Link from 'next/link'
-import type { LiveFlightSummary } from '@/lib/flight/types'
+import type { RouteFlight } from '@/lib/flight/types'
+import { routeStatusLabel } from '@/lib/flight/route-status'
+import { localTime } from '@/lib/flight/time'
 import styles from './FlightList.module.css'
 
-export function FlightList({ flights }: { flights: LiveFlightSummary[] }) {
+export function FlightList({ flights }: { flights: RouteFlight[] }) {
   return (
     <ul className={styles.list}>
       {flights.map((f, index) => {
@@ -14,7 +16,8 @@ export function FlightList({ flights }: { flights: LiveFlightSummary[] }) {
           <li key={`${f.flightIata}-${index}`}>
             <Link href={`/flight/${encodeURIComponent(f.flightIata)}${query ? `?${query}` : ''}`}>
               <strong>{f.flightIata}</strong>
-              <span>{f.depIata ?? '—'} → {f.arrIata ?? '—'}</span>
+              <span>{f.depIata} → {f.arrIata}</span>
+              <span>{localTime(f.departureLocal) ?? '—'} · {routeStatusLabel(f.status)}</span>
             </Link>
           </li>
         )
