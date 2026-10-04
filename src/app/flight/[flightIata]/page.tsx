@@ -5,7 +5,7 @@ import { ErrorState } from '@/components/ErrorState/ErrorState'
 import { FlightView } from '@/components/FlightView/FlightView'
 import { pickFlight } from '@/lib/flight/match'
 import { getFlightDetails } from '@/lib/providers/aerodatabox'
-import { parseDate, parseFlightNumber, parseIata } from '@/lib/validate'
+import { parseDate, parseFlightNumber, parseIata, safeDecode } from '@/lib/validate'
 
 interface Props {
   params: Promise<{ flightIata: string }>
@@ -17,7 +17,8 @@ export default async function FlightPage({ params, searchParams }: Props) {
   const sp = await searchParams
   const now = new Date()
 
-  const number = parseFlightNumber(decodeURIComponent(flightIata))
+  const decoded = safeDecode(flightIata)
+  const number = decoded === null ? parseFlightNumber('') : parseFlightNumber(decoded)
   if (!number.ok) return <ErrorState error={number.error} />
 
   let date: string | undefined

@@ -22,7 +22,7 @@ export async function getWeather(lat: number, lon: number): Promise<Result<Weath
 
   const res = await fetchJson({
     provider: PROVIDER,
-    url: `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${key.data}`,
+    url: `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${encodeURIComponent(key.data)}`,
     schema,
     revalidate: 600,
   })

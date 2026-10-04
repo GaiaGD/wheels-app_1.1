@@ -24,6 +24,11 @@ test('an unknown flight shows a friendly message, not a crash', async ({ page })
   await expect(page).toHaveURL('/')
 })
 
+test('mock mode shows the demo banner', async ({ page }) => {
+  await page.goto('/')
+  await expect(page.getByRole('note')).toContainText('Demo data')
+})
+
 test('home page works with the keyboard only', async ({ page }) => {
   await page.goto('/')
   const flightTab = page.getByRole('tab', { name: /flight number/i })
@@ -49,6 +54,7 @@ test.describe('layout', () => {
     for (const path of ['/', '/flight/AA100']) {
       await page.goto(path)
       await expect(page.getByRole('main')).toBeVisible()
+      if (path !== '/') await expect(page.getByRole('status')).toBeVisible() // wait past the loading shell
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)
       expect(overflow, `no horizontal scroll on ${path}`).toBe(true)
     }
@@ -57,8 +63,12 @@ test.describe('layout', () => {
   test('departure and arrival sit side by side at 1280px', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 })
     await page.goto('/flight/AA100')
-    const dep = await page.locator('section[aria-label="Departure"]').boundingBox()
-    const arr = await page.locator('section[aria-label="Arrival"]').boundingBox()
+    const depSection = page.locator('section[aria-label="Departure"]')
+    const arrSection = page.locator('section[aria-label="Arrival"]')
+    await expect(depSection).toBeVisible()
+    await expect(arrSection).toBeVisible()
+    const dep = await depSection.boundingBox()
+    const arr = await arrSection.boundingBox()
     expect(dep && arr).toBeTruthy()
     expect(Math.abs(dep!.y - arr!.y)).toBeLessThan(40)
     expect(arr!.x).toBeGreaterThan(dep!.x + dep!.width)

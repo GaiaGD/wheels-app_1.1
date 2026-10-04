@@ -81,4 +81,16 @@ describe('SearchForm', () => {
     await user.type(screen.getByRole('combobox', { name: /airline/i }), 'aa{Enter}')
     expect(push).toHaveBeenCalledWith('/search?dep=JFK&arr=LAX&airline=AA')
   })
+
+  it('links invalid inputs to their error text with aria-describedby', async () => {
+    const user = userEvent.setup()
+    render(<SearchForm />)
+    await user.click(screen.getByRole('tab', { name: /flight number/i }))
+    await user.type(screen.getByLabelText('Flight number'), '!!')
+    await user.click(screen.getByRole('button', { name: /search/i }))
+    const input = screen.getByLabelText('Flight number')
+    const id = input.getAttribute('aria-describedby')
+    expect(id).toBeTruthy()
+    expect(document.getElementById(id!)).toHaveTextContent(/valid flight number/i)
+  })
 })

@@ -77,13 +77,13 @@ export function SearchForm() {
         <div role="tabpanel" className={styles.fields}>
           <div className={styles.field}>
             <label htmlFor="flight-number">Flight number</label>
-            <input id="flight-number" value={number} placeholder="AA123" autoComplete="off" onChange={(e) => setNumber(e.target.value)} aria-invalid={errors.number ? true : undefined} />
-            {errors.number && <p role="alert" className={styles.error}>{errors.number}</p>}
+            <input id="flight-number" value={number} placeholder="AA123" autoComplete="off" onChange={(e) => setNumber(e.target.value)} aria-invalid={errors.number ? true : undefined} aria-describedby={errors.number ? 'flight-number-error' : undefined} />
+            {errors.number && <p id="flight-number-error" role="alert" className={styles.error}>{errors.number}</p>}
           </div>
           <div className={styles.field}>
             <label htmlFor="flight-date">Date (optional)</label>
-            <input id="flight-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} aria-invalid={errors.date ? true : undefined} />
-            {errors.date && <p role="alert" className={styles.error}>{errors.date}</p>}
+            <input id="flight-date" type="date" value={date} onChange={(e) => setDate(e.target.value)} aria-invalid={errors.date ? true : undefined} aria-describedby={errors.date ? 'flight-date-error' : undefined} />
+            {errors.date && <p id="flight-date-error" role="alert" className={styles.error}>{errors.date}</p>}
           </div>
           <p className={styles.hint}>Works for past, current and upcoming flights.</p>
         </div>

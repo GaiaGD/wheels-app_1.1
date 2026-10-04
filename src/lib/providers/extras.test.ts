@@ -27,6 +27,13 @@ describe('getWeather', () => {
       data: { tempC: 20, tempF: 68, condition: 'Clouds', iconUrl: 'https://openweathermap.org/img/wn/04d@2x.png' },
     })
   })
+  it('URL-encodes the API key', async () => {
+    vi.stubEnv('OPENWEATHER_API_KEY', 'a&b=c d')
+    stubFetch({ main: { temp: 20 }, weather: [{ main: 'Clouds', icon: '04d' }] })
+    await getWeather(40.6, -73.7)
+    const url = String((fetch as unknown as ReturnType<typeof vi.fn>).mock.calls[0][0])
+    expect(url).toContain('appid=a%26b%3Dc%20d')
+  })
   it('returns bad_data when the weather array is empty', async () => {
     stubFetch({ main: { temp: 20 }, weather: [] })
     const res = await getWeather(1, 2)

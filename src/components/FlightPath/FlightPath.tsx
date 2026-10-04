@@ -13,7 +13,7 @@ interface Props {
 
 export function FlightPath({ progress, status, countdown, flightNumber, airline, aircraft }: Props) {
   const position = status === 'landed' ? 1 : status === 'scheduled' || status === 'delayed' ? 0 : (progress ?? 0.5)
-  const showPlane = status !== 'cancelled'
+  const showPlane = status !== 'cancelled' && status !== 'diverted'
   return (
     <section className={styles.path} aria-label="Flight path">
       <div className={styles.code}>

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { parseAirlineCode, parseDate, parseFlightNumber, parseIata } from './validate'
+import { safeDecode, parseAirlineCode, parseDate, parseFlightNumber, parseIata } from './validate'
 
 describe('parseFlightNumber', () => {
   it('normalizes valid numbers', () => {
@@ -36,4 +36,13 @@ describe('parseDate', () => {
   it('accepts real dates', () => expect(parseDate('2026-02-28')).toEqual({ ok: true, data: '2026-02-28' }))
   it.each(['', '2026-13-01', '2026-02-30', '02-28-2026', 'tomorrow'])('rejects %j', (input) =>
     expect(parseDate(input).ok).toBe(false))
+})
+
+describe('safeDecode', () => {
+  it('decodes valid sequences', () => {
+    expect(safeDecode('AA%20100')).toBe('AA 100')
+  })
+  it('returns null on malformed percent sequences', () => {
+    expect(safeDecode('%E0%A4%A')).toBeNull()
+  })
 })

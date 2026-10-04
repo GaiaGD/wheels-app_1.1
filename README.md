@@ -12,7 +12,7 @@ npm run dev
 
 Requires Node 20.9+ (22.12+ recommended; on 22.11 the Vitest DOM environment is happy-dom for that reason).
 
-With `USE_MOCK_DATA=true` the app runs on fixtures (no keys, no API quota). Try `/flight/AA100` (in the air), `BA117` (scheduled), `LH400` (landed), `DL1` (cancelled), `AF11` (diverted), `UA900` (delayed), `ER404` (provider down), `ER429` (rate limited), or `/search?dep=JFK&arr=LAX&airline=AA`.
+Mock mode is opt-in (`.env.example` defaults to `USE_MOCK_DATA=false`). Run `USE_MOCK_DATA=true npm run dev` to use fixtures (no keys, no API quota); every page then shows a "Demo data" banner. Try `/flight/AA100` (in the air), `BA117` (scheduled), `LH400` (landed), `DL1` (cancelled), `AF11` (diverted), `UA900` (delayed), `ER404` (provider down), `ER429` (rate limited), or `/search?dep=JFK&arr=LAX&airline=AA`.
 
 ## Keys (server-only)
 

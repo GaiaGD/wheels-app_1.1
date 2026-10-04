@@ -12,7 +12,7 @@ export function FlightList({ flights }: { flights: LiveFlightSummary[] }) {
         const query = params.toString()
         return (
           <li key={`${f.flightIata}-${index}`}>
-            <Link href={`/flight/${f.flightIata}${query ? `?${query}` : ''}`}>
+            <Link href={`/flight/${encodeURIComponent(f.flightIata)}${query ? `?${query}` : ''}`}>
               <strong>{f.flightIata}</strong>
               <span>{f.depIata ?? '—'} → {f.arrIata ?? '—'}</span>
             </Link>

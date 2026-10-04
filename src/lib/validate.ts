@@ -23,3 +23,11 @@ export function parseDate(input: string): Result<string> {
   const d = new Date(`${v}T00:00:00Z`)
   return !Number.isNaN(d.getTime()) && d.toISOString().startsWith(v) ? ok(v) : bad('Invalid date')
 }
+
+export function safeDecode(input: string): string | null {
+  try {
+    return decodeURIComponent(input)
+  } catch {
+    return null
+  }
+}
