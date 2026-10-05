@@ -8,6 +8,10 @@ import { parseAirlineCode, parseIata } from '../validate'
 import type { RouteFlight } from '../flight/types'
 
 const PROVIDER = 'aerodatabox'
+
+// Each board call costs 2 API units on the free plan, so lists are cached for 10 minutes.
+// The flight page itself still refreshes every minute.
+const BOARD_REVALIDATE_SECONDS = 600
 const HOST = 'aerodatabox.p.rapidapi.com'
 const MIN = 60_000
 /** Each board window must stay under the API's 12 h limit. */
@@ -83,7 +87,7 @@ export async function searchRouteFlights(q: {
         `?direction=Departure&withLeg=true&withCancelled=true&withCodeshared=true&withCargo=false&withPrivate=false&withLocation=false`,
       init,
       schema: boardResponse,
-      revalidate: 60,
+      revalidate: BOARD_REVALIDATE_SECONDS,
     })
   const [older, newer] = await Promise.all([board(2 * WINDOW_MIN, WINDOW_MIN), board(WINDOW_MIN, 0)])
   if (!older.ok) return older

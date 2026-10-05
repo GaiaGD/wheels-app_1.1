@@ -16,4 +16,10 @@ describe('userMessage', () => {
     const m = userMessage({ kind: 'misconfigured', provider: 'p', message: 'Missing RAPIDAPI_KEY' })
     expect(m.body).not.toMatch(/key|env/i)
   })
+
+  it('explains the quota limit for rate_limited', () => {
+    const m = userMessage({ kind: 'rate_limited', provider: 'p', message: 'x' })
+    expect(m.title).toMatch(/running out/i)
+    expect(m.body).toMatch(/monthly limit/i)
+  })
 })

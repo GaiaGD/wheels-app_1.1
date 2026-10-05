@@ -7,7 +7,10 @@ export function userMessage(error: ProviderError): { title: string; body: string
     case 'not_found':
       return { title: 'No flight found', body: 'We couldn\'t find a matching flight. Double-check the flight number and date.' }
     case 'rate_limited':
-      return { title: 'Too many requests', body: 'We\'ve hit our data limit for now. Please try again in a few minutes.' }
+      return {
+        title: 'We\'re running out of flight data',
+        body: 'This demo runs on a free data plan with a small monthly limit, and it has been reached. Please try again later or next month.',
+      }
     case 'provider_down':
       return { title: 'Flight data is unavailable', body: 'Our flight data source isn\'t responding. Please try again shortly.' }
     case 'bad_data':

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Work_Sans } from 'next/font/google'
 import { DemoBanner } from '@/components/DemoBanner/DemoBanner'
+import { Footer } from '@/components/Footer/Footer'
 import { isMockMode } from '@/lib/env'
 import './globals.css'
 
@@ -17,6 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <DemoBanner show={isMockMode()} />
         {children}
+        <Footer />
       </body>
     </html>
   )

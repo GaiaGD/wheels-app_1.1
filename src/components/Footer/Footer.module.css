@@ -1,0 +1,13 @@
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 16px;
+  padding: 16px;
+  font-size: 11px;
+}
+
+.footer a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

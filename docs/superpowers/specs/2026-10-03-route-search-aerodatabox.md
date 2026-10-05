@@ -19,7 +19,7 @@ If either board (or the time lookup) fails, that error is returned; an incomplet
 No match gives `not_found`. Only flights that departed in the last 24 hours are found; upcoming flights need flight-number search.
 
 ## Quota
-Each route search = 3 API calls (2 boards + 1 time lookup), cached 60 s (boards) and 1 h (time lookup).
+Each route search = up to 3 API calls (2 boards + 1 time lookup), cached 10 min (boards) and 1 h (time lookup). Measured via the `x-tier` response header on the free plan: board = Tier 2 (2 units), time lookup = Tier 1 (1 unit), flight status = Tier 2 (2 units); free plan = 400 units/month, so about 4-5 units per route search and 2 per flight page view.
 
 ## Switching back
 `git checkout build/v1` restores the AirLabs-based route search (needs `AIRLABS_API_KEY`).
