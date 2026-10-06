@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { LngLatBounds, Map as MapLibreMap, Marker } from 'maplibre-gl'
+import { LngLatBounds, Map as MapLibreMap, Marker, setWorkerUrl } from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { greatCircleLine, type LatLon, type PlanePosition } from '@/lib/flight/geo'
 import styles from './FlightMap.module.css'
@@ -18,6 +18,10 @@ export interface FlightMapProps {
 
 const STYLE_URL = 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json'
 const SOURCE_ID = 'route'
+// The bundler moves maplibre-gl into a chunk, so its default worker URL (a sibling file of the
+// module) 404s. These two files are copies of node_modules/maplibre-gl/dist/maplibre-gl-worker.mjs
+// and maplibre-gl-shared.mjs: refresh them when upgrading maplibre-gl.
+const WORKER_URL = '/maplibre/maplibre-gl-worker.mjs'
 // public/plane-icon.svg points east (right), so a bearing of 90 needs no rotation.
 const ICON_POINTS_BEARING = 90
 
@@ -67,6 +71,7 @@ export function FlightMap({ from, to, plane }: FlightMapProps) {
 
     let map: MapLibreMap
     try {
+      setWorkerUrl(WORKER_URL)
       map = new MapLibreMap({ container, style: STYLE_URL, attributionControl: { compact: true } })
     } catch {
       // No WebGL: keep the plain background.
@@ -95,7 +100,13 @@ export function FlightMap({ from, to, plane }: FlightMapProps) {
       })
       const bounds = new LngLatBounds()
       for (const point of line) bounds.extend(point)
-      map.fitBounds(bounds, { padding: 56, maxZoom: 6, animate: !reduced })
+      // Keep the route clear of the floating cards: side cards on desktop, top/bottom cards on phones.
+      const wide = typeof window !== 'undefined' && window.innerWidth >= 900
+      const padding = wide ? { top: 80, bottom: 110, left: 430, right: 430 } : { top: 300, bottom: 190, left: 40, right: 40 }
+      map.fitBounds(bounds, { padding, maxZoom: 6, animate: !reduced })
+      // On small screens start with the attribution folded to its (i) button so it never covers the
+      // "Check another flight" button; it still opens on tap.
+      if (!wide) container.querySelector('.maplibregl-ctrl-attrib')?.classList.remove('maplibregl-compact-show')
     })
 
     const markers = [from, to].map((a) =>

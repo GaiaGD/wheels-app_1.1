@@ -30,6 +30,10 @@ Keys are read only on the server and never reach the browser.
 
 Every provider call returns data or a typed error (`bad_input`, `not_found`, `rate_limited`, `provider_down`, `bad_data`, `misconfigured`). Weather and photos stream in separately, so if one fails only its card shows "unavailable".
 
+## Map
+
+The flight page is a full-screen [MapLibre GL](https://maplibre.org/) map on CARTO's free "Voyager" basemap (no key needed; tiles are credited to CARTO and OpenStreetMap in the map corner) with the departure and arrival cards floating on top. It draws a great-circle route between the airports and a plane marker. The plane sits at the real position when AeroDataBox returns one; otherwise its place is estimated from the flight's progress along the route and the map labels it "Estimated position". There is no plane for cancelled or diverted flights. MapLibre's web worker is served from `public/maplibre/` (copies of `maplibre-gl-worker.mjs` and `maplibre-gl-shared.mjs` from `node_modules/maplibre-gl/dist`; refresh them when upgrading maplibre-gl).
+
 ## Scripts
 
 `npm test` · `npm run e2e` · `npm run build` · `node scripts/build-data.mjs` (regenerate airport/airline data)

@@ -1,10 +1,12 @@
 import Link from 'next/link'
 import type { ReactNode } from 'react'
+import { planePosition } from '@/lib/flight/geo'
 import { deriveStatus } from '@/lib/flight/status'
-import { flightProgress } from '@/lib/flight/progress'
+import { flightProgress, planeFraction } from '@/lib/flight/progress'
 import { bestUtc, delayMinutes, formatDuration } from '@/lib/flight/time'
-import type { Flight } from '@/lib/flight/types'
+import type { AirportInfo, Flight } from '@/lib/flight/types'
 import { AirportCard } from '../AirportCard/AirportCard'
+import { FlightMapLoader } from '../FlightMap/FlightMapLoader'
 import { FlightPath } from '../FlightPath/FlightPath'
 import { StatusBanner } from '../StatusBanner/StatusBanner'
 import styles from './FlightView.module.css'
@@ -18,6 +20,11 @@ interface Props {
   arrivalWeather: ReactNode
 }
 
+function mapAirport(a: AirportInfo) {
+  if (typeof a.lat !== 'number' || typeof a.lon !== 'number') return null
+  return { code: a.iata ?? a.icao ?? '', lat: a.lat, lon: a.lon }
+}
+
 export function FlightView({ flight, now, departurePhoto, arrivalPhoto, departureWeather, arrivalWeather }: Props) {
   const status = deriveStatus(flight, now)
   const depTime = Date.parse(bestUtc(flight.departure) ?? '')
@@ -26,25 +33,45 @@ export function FlightView({ flight, now, departurePhoto, arrivalPhoto, departur
       ? formatDuration(depTime - now.getTime())
       : null
   const bannerDelay = status === 'landed' ? delayMinutes(flight.arrival) : delayMinutes(flight.departure)
+  const progress = flightProgress(flight, now)
+
+  const from = mapAirport(flight.departure.airport)
+  const to = mapAirport(flight.arrival.airport)
+  const plane = from && to ? planePosition(from, to, planeFraction(status, progress), flight.position) : null
 
   return (
     <main className={styles.page}>
-      <div className={styles.banner}>
-        <StatusBanner status={status} delayMinutes={bannerDelay} />
+      {from && to && (
+        <div className={styles.map}>
+          <FlightMapLoader from={from} to={to} plane={plane} />
+        </div>
+      )}
+      <div className={styles.overlay}>
+        <div className={styles.top}>
+          <div className={styles.pill}>
+            <StatusBanner status={status} delayMinutes={bannerDelay} />
+          </div>
+          <div className={styles.departure}>
+            <AirportCard role="departure" endpoint={flight.departure} photo={departurePhoto} weather={departureWeather} />
+          </div>
+          <div className={styles.path}>
+            <FlightPath
+              progress={progress}
+              status={status}
+              countdown={countdown}
+              flightNumber={flight.number}
+              airline={flight.airlineName}
+              aircraft={flight.aircraftModel}
+            />
+          </div>
+        </div>
+        <div className={styles.bottom}>
+          <div className={styles.arrival}>
+            <AirportCard role="arrival" endpoint={flight.arrival} photo={arrivalPhoto} weather={arrivalWeather} />
+          </div>
+          <Link href="/" className={`button ${styles.back}`}>Check another flight</Link>
+        </div>
       </div>
-      <div className={styles.grid}>
-        <AirportCard role="departure" endpoint={flight.departure} photo={departurePhoto} weather={departureWeather} />
-        <FlightPath
-          progress={flightProgress(flight, now)}
-          status={status}
-          countdown={countdown}
-          flightNumber={flight.number}
-          airline={flight.airlineName}
-          aircraft={flight.aircraftModel}
-        />
-        <AirportCard role="arrival" endpoint={flight.arrival} photo={arrivalPhoto} weather={arrivalWeather} />
-      </div>
-      <Link href="/" className={`button ${styles.back}`}>Check another flight</Link>
     </main>
   )
 }

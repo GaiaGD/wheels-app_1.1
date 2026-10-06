@@ -60,8 +60,8 @@ test.describe('layout', () => {
     }
   })
 
-  test('departure and arrival sit side by side at 1280px', async ({ page }) => {
-    await page.setViewportSize({ width: 1280, height: 900 })
+  test('desktop: departure left of arrival, same top region (1280x800)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 })
     await page.goto('/flight/AA100')
     const depSection = page.locator('section[aria-label="Departure"]')
     const arrSection = page.locator('section[aria-label="Arrival"]')
@@ -70,7 +70,39 @@ test.describe('layout', () => {
     const dep = await depSection.boundingBox()
     const arr = await arrSection.boundingBox()
     expect(dep && arr).toBeTruthy()
-    expect(Math.abs(dep!.y - arr!.y)).toBeLessThan(40)
+    const centre = (b: { y: number; height: number }) => b.y + b.height / 2
+    expect(Math.abs(centre(dep!) - centre(arr!))).toBeLessThan(80)
     expect(arr!.x).toBeGreaterThan(dep!.x + dep!.width)
   })
+
+  test('phone: departure above arrival, both inside the width (390x844)', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto('/flight/AA100')
+    const depSection = page.locator('section[aria-label="Departure"]')
+    const arrSection = page.locator('section[aria-label="Arrival"]')
+    await expect(depSection).toBeVisible()
+    await expect(arrSection).toBeVisible()
+    const dep = await depSection.boundingBox()
+    const arr = await arrSection.boundingBox()
+    expect(dep && arr).toBeTruthy()
+    expect(dep!.y + dep!.height).toBeLessThanOrEqual(arr!.y)
+    for (const b of [dep!, arr!]) {
+      expect(b.x).toBeGreaterThanOrEqual(0)
+      expect(b.x + b.width).toBeLessThanOrEqual(390)
+    }
+  })
+
+  for (const size of [
+    { width: 390, height: 844 },
+    { width: 1280, height: 800 },
+  ]) {
+    test(`route map is visible at ${size.width}x${size.height}`, async ({ page }) => {
+      await page.setViewportSize(size)
+      await page.goto('/flight/AA100')
+      const map = page.locator('[aria-label="Flight route map"]')
+      await expect(map).toBeVisible({ timeout: 30_000 })
+      // The canvas needs WebGL; give it time to load the map chunk and create it.
+      await expect(map.locator('canvas')).toHaveCount(1, { timeout: 30_000 })
+    })
+  }
 })

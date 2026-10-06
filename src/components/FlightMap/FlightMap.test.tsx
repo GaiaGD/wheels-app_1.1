@@ -75,6 +75,7 @@ vi.mock('maplibre-gl', () => ({
   Map: mocks.FakeMap,
   Marker: mocks.FakeMarker,
   LngLatBounds: mocks.FakeBounds,
+  setWorkerUrl: vi.fn(),
 }))
 vi.mock('maplibre-gl/dist/maplibre-gl.css', () => ({}))
 
@@ -138,7 +139,7 @@ describe('FlightMap', () => {
     // the line's last point is the destination, with its longitude unwrapped along the route
     expect(coords[coords.length - 1][1]).toBeCloseTo(to.lat, 6)
     expect(coords[coords.length - 1][0] % 360).toBeCloseTo(to.lon, 6)
-    expect(options.padding).toBeGreaterThan(0)
+    expect(Object.values(options.padding as Record<string, number>).every((v) => v > 0)).toBe(true)
     expect(options.animate).toBe(true)
   })
 

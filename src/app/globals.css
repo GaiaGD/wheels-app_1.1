@@ -11,6 +11,8 @@
   -webkit-text-size-adjust: 100%;
 }
 
+body[data-demo='true'] { --demo-banner-h: 28px; }
+
 *, *::before, *::after { box-sizing: border-box; }
 
 body {
