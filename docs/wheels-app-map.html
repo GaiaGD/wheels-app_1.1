@@ -12,7 +12,7 @@
   :root {
     --bg: #ebebec;
     --card: #ffffff;
-    --ink: #231f20;
+    --pale: #231f20;
     --muted: #6a6667;
     --line: #cfcfd1;
     --browser: #1f5fa8;
@@ -24,18 +24,18 @@
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --bg: #1a1819; --card: #252223; --ink: #ece9ea; --muted: #a09b9d; --line: #3b3738;
+      --bg: #1a1819; --card: #252223; --pale: #ece9ea; --muted: #a09b9d; --line: #3b3738;
       --browser: #7db4ec; --browser-bg: #1d2b3b; --api: #e0a24b; --api-bg: #35291a;
       color-scheme: dark;
     }
   }
   :root[data-theme="dark"] {
-    --bg: #1a1819; --card: #252223; --ink: #ece9ea; --muted: #a09b9d; --line: #3b3738;
+    --bg: #1a1819; --card: #252223; --pale: #ece9ea; --muted: #a09b9d; --line: #3b3738;
     --browser: #7db4ec; --browser-bg: #1d2b3b; --api: #e0a24b; --api-bg: #35291a;
     color-scheme: dark;
   }
 
-  body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.55; }
+  body { background: var(--bg); color: var(--pale); font-family: var(--font-body); font-size: 15px; line-height: 1.55; }
   .wrap { max-width: 1100px; margin: 0 auto; padding-inline: 16px; padding-block: 32px 48px; display: grid; gap: 40px; }
   h1 { font-size: 30px; font-weight: 600; margin: 0 0 6px; text-wrap: balance; }
   h2 { font-size: 19px; font-weight: 600; margin: 0 0 4px; text-wrap: balance; }
@@ -45,22 +45,22 @@
 
   .legend { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 12px 0 0; padding: 0; list-style: none; font-size: 13px; }
   .legend li { display: flex; align-items: center; gap: 8px; }
-  .swatch { width: 22px; height: 14px; border-radius: 4px; border: 1.5px solid var(--ink); background: var(--card); }
+  .swatch { width: 22px; height: 14px; border-radius: 4px; border: 1.5px solid var(--pale); background: var(--card); }
   .swatch.browser { border-color: var(--browser); background: var(--browser-bg); }
   .swatch.api { border-color: var(--api); background: var(--api-bg); }
   .swatch.dashed { border-style: dashed; }
 
   figure { margin: 14px 0 0; display: grid; gap: 10px; }
   .scroll { overflow-x: auto; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
-  .scroll svg { display: block; width: 100%; min-width: 760px; height: auto; color: var(--ink); }
+  .scroll svg { display: block; width: 100%; min-width: 760px; height: auto; color: var(--pale); }
   figcaption { color: var(--muted); font-size: 13.5px; max-width: 78ch; }
 
   /* SVG parts, styled from the page so both themes follow the tokens */
-  .node { fill: var(--card); stroke: var(--ink); stroke-width: 1.5; }
+  .node { fill: var(--card); stroke: var(--pale); stroke-width: 1.5; }
   .node.browser { fill: var(--browser-bg); stroke: var(--browser); }
   .node.api { fill: var(--api-bg); stroke: var(--api); }
   .node.dashed { stroke-dasharray: 5 4; }
-  .t-title { font: 600 13px var(--font-body); fill: var(--ink); }
+  .t-title { font: 600 13px var(--font-body); fill: var(--pale); }
   .t-sub { font: 400 10.5px var(--font-mono); fill: var(--muted); }
   .t-api { font: 400 10.5px var(--font-mono); fill: var(--api); }
   .t-label { font: 400 10.5px var(--font-mono); fill: var(--muted); paint-order: stroke; stroke: var(--card); stroke-width: 5px; stroke-linejoin: round; }

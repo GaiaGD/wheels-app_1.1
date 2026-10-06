@@ -83,7 +83,7 @@ import { FlightMap } from './FlightMap'
 
 const from = { code: 'FCO', lat: 41.8, lon: 12.25 }
 const to = { code: 'JFK', lat: 40.64, lon: -73.78 }
-const STYLE = 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json'
+const STYLE = 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json'
 
 const mq = { wide: false, added: 0, removed: 0, listeners: [] as Array<() => void> }
 const ro = { instances: [] as Array<{ cb: () => void; disconnected: boolean }> }
@@ -138,7 +138,7 @@ beforeEach(() => {
 })
 
 describe('FlightMap', () => {
-  it('has an accessible region and creates the map once with the Voyager style', () => {
+  it('has an accessible region and creates the map once with the Dark Matter style', () => {
     const { rerender } = render(<FlightMap from={from} to={to} plane={null} />)
     expect(screen.getByRole('region', { name: 'Flight route map' })).toBeTruthy()
     expect(mocks.state.maps).toHaveLength(1)

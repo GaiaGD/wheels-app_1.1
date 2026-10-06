@@ -60,7 +60,7 @@ Each component folder holds `Name.tsx`, `Name.module.css` and (where listed) `Na
 - Modify: `package.json` (scripts), `src/app/layout.tsx`, `src/app/globals.css`, `.gitignore`
 
 **Interfaces:**
-- Produces: `npm test` (Vitest), `npm run dev`, `npm run build`; CSS variables `--ink`, `--bg`, `--card`, `--muted`, `--radius` in `globals.css`; alias `@/` → `src/`.
+- Produces: `npm test` (Vitest), `npm run dev`, `npm run build`; CSS variables `--pale`, `--bg`, `--card`, `--muted`, `--radius` in `globals.css`; alias `@/` → `src/`.
 
 - [ ] **Step 1: Scaffold Next.js into the existing folder**
 
@@ -123,7 +123,7 @@ In `package.json` add to `scripts`: `"test": "vitest run"`, `"test:watch": "vite
 
 ```bash
 git clone --depth 1 https://github.com/GaiaGD/wheels-app "$TMPDIR/wheels-old"
-cp "$TMPDIR/wheels-old/public/"{wheels-app-logo.gif,plane-icon.svg,wa-logotype.svg,wa-logo.svg,go-back.svg} public/
+cp "$TMPDIR/wheels-old/public/"{wheels-app-logo-white.gif,plane-icon.svg,wa-logotype-white.svg,wa-logo.svg,go-back.svg} public/
 ls public
 ```
 
@@ -177,7 +177,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 ```css
 :root {
-  --ink: #231f20;
+  --pale: #231f20;
   --bg: #d9d9d9;
   --card: #ffffff;
   --muted: #c9c9c9;
@@ -196,7 +196,7 @@ body {
   font-family: var(--font-work-sans), sans-serif;
   font-weight: 400;
   font-size: 12px;
-  color: var(--ink);
+  color: var(--pale);
   background-color: var(--bg);
 }
 
@@ -204,7 +204,7 @@ a { color: inherit; text-decoration: none; }
 img { max-width: 100%; max-height: 100%; }
 h1, h2, h3, h4 { font-weight: 400; margin: 0; }
 
-:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+:focus-visible { outline: 2px solid var(--pale); outline-offset: 2px; }
 
 .button {
   display: inline-block;
@@ -214,7 +214,7 @@ h1, h2, h3, h4 { font-weight: 400; margin: 0; }
   font-size: 15px;
   padding: 14px 28px;
   border-radius: var(--radius);
-  background: var(--ink);
+  background: var(--pale);
   color: var(--bg);
   box-shadow: 0 5px 12px 0 #231f207a, 0 15px 10px 0 #231f202e;
   text-align: center;
@@ -1992,9 +1992,9 @@ export function StatusBanner({ status, delayMinutes }: { status: FlightStatus; d
 
 ```css
 .banner { padding: 10px 16px; border-radius: 999px; background: var(--card); box-shadow: var(--shadow); font-size: 13px; text-align: center; }
-.in_air { background: var(--ink); color: var(--bg); }
-.delayed { border: 1px solid var(--ink); }
-.cancelled, .diverted { border: 1px dashed var(--ink); }
+.in_air { background: var(--pale); color: var(--bg); }
+.delayed { border: 1px solid var(--pale); }
+.cancelled, .diverted { border: 1px dashed var(--pale); }
 ```
 
 `src/components/ErrorState/ErrorState.tsx`:
@@ -2088,7 +2088,7 @@ export function FlightPath({ progress, status, countdown, flightNumber, airline,
 .code p, .code h2, .code h3 { margin: 0; }
 .code h2 { font-size: 25px; }
 .track { position: relative; width: 95%; margin: 14px auto; height: 20px; }
-.line { position: absolute; top: 10px; left: 0; right: 0; border-bottom: 1px dashed var(--ink); }
+.line { position: absolute; top: 10px; left: 0; right: 0; border-bottom: 1px dashed var(--pale); }
 .plane { position: absolute; top: 0; height: 20px; width: 20px; left: var(--progress, 0%); transform: translateX(-50%); animation: fly 2.5s ease-out; }
 .countdown { margin: 0; font-size: 13px; }
 @keyframes fly { from { left: 0%; } }
@@ -2754,9 +2754,9 @@ export function AutocompleteField({ label, endpoint, placeholder, onSelect, erro
 ```css
 .field { position: relative; display: grid; gap: 4px; text-align: left; }
 .field label { font-size: 12px; }
-.field input { font: inherit; font-size: 15px; padding: 10px 0; border: 0; border-bottom: 1px solid #231f203a; background: transparent; color: var(--ink); text-align: center; transition: border-color 1s; }
+.field input { font: inherit; font-size: 15px; padding: 10px 0; border: 0; border-bottom: 1px solid #231f203a; background: transparent; color: var(--pale); text-align: center; transition: border-color 1s; }
 .field input:focus { border-bottom-color: #231f209f; outline: none; }
-.field input:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.field input:focus-visible { outline: 2px solid var(--pale); outline-offset: 2px; }
 .list { position: absolute; z-index: 5; top: 100%; left: 0; right: 0; margin: 4px 0 0; padding: 0; list-style: none; max-height: 300px; overflow: auto; background: var(--card); border-radius: 10px; box-shadow: 0 5px 12px 0 #7171717a, 0 15px 10px 0 #4444442e; }
 .list li { display: grid; padding: 12px 16px; border-bottom: 1px solid #231f2087; cursor: pointer; }
 .list li:last-child { border-bottom: 0; }
@@ -2940,12 +2940,12 @@ export function SearchForm() {
 ```css
 .form { display: grid; gap: 20px; width: 100%; max-width: 420px; margin: 0 auto; }
 .tabs { display: flex; gap: 8px; justify-content: center; }
-.tabs button { font: inherit; font-size: 13px; padding: 8px 14px; border: 1px solid var(--ink); border-radius: 999px; background: transparent; color: var(--ink); cursor: pointer; }
-.tabs button[aria-selected='true'] { background: var(--ink); color: var(--bg); }
+.tabs button { font: inherit; font-size: 13px; padding: 8px 14px; border: 1px solid var(--pale); border-radius: 999px; background: transparent; color: var(--pale); cursor: pointer; }
+.tabs button[aria-selected='true'] { background: var(--pale); color: var(--bg); }
 .fields { display: grid; gap: 22px; }
 .field { display: grid; gap: 4px; }
 .field label { font-size: 12px; }
-.field input { font: inherit; font-size: 15px; padding: 10px 0; border: 0; border-bottom: 1px solid #231f203a; background: transparent; color: var(--ink); text-align: center; }
+.field input { font: inherit; font-size: 15px; padding: 10px 0; border: 0; border-bottom: 1px solid #231f203a; background: transparent; color: var(--pale); text-align: center; }
 .hint { margin: 0; font-size: 11px; text-align: center; }
 .error { margin: 0; font-size: 12px; font-weight: 600; }
 ```
@@ -3042,8 +3042,8 @@ import { SearchForm } from '@/components/SearchForm/SearchForm'
 export default function Home() {
   return (
     <main style={{ minHeight: '100vh', display: 'grid', alignContent: 'center', justifyItems: 'center', gap: 24, padding: '32px 16px', textAlign: 'center' }}>
-      <img src="/wheels-app-logo.gif" alt="" style={{ maxHeight: 150 }} />
-      <img src="/wa-logotype.svg" alt="Wheels App" style={{ maxWidth: 200 }} />
+      <img src="/wheels-app-logo-white.gif" alt="" style={{ maxHeight: 150 }} />
+      <img src="/wa-logotype-white.svg" alt="Wheels App" style={{ maxWidth: 200 }} />
       <SearchForm />
     </main>
   )

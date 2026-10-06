@@ -16,7 +16,7 @@ export interface FlightMapProps {
   plane: PlanePosition | null
 }
 
-const STYLE_URL = 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json'
+const STYLE_URL = 'https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json'
 const SOURCE_ID = 'route'
 // The bundler moves maplibre-gl into a chunk, so its default worker URL (a sibling file of the
 // module) 404s. These two files are copies of node_modules/maplibre-gl/dist/maplibre-gl-worker.mjs
