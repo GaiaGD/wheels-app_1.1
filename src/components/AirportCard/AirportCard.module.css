@@ -6,7 +6,7 @@
 .left .big, .right .big { font-size: 24px; font-weight: 400; line-height: 1.15; margin: 0; }
 .divider { border: 0; border-top: 1px solid var(--bg); margin: 5px 0; }
 
-@media (min-width: 900px) {
+@media (min-width: 1100px) {
   .photo { height: 130px; }
   .info { gap: 12px; padding: 14px; }
   .left p, .right p { font-size: 12px; margin: 2px 0; }

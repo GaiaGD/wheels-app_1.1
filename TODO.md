@@ -13,6 +13,8 @@ Still open:
 - [ ] Check whether the AeroDataBox plan returns a real `position`: needs the owner's go-ahead because it costs units (2 per call). Until then the plane is always an estimate.
 - [ ] Merge `map-view` into `main` and push.
 - [ ] When upgrading maplibre-gl, refresh `public/maplibre/*.mjs` (worker files).
+- [ ] flight/[flightIata]/loading.tsx still uses the old centred layout (jump into the full-screen map).
+- [ ] FlightMap rebuilds the whole map when the plane position changes: split before adding live updates.
 
 Verification rules (still apply):
 - Use mock mode only. No real AeroDataBox calls without asking (free plan: 400 units a month; flight status and boards cost 2 units, time lookup 1).

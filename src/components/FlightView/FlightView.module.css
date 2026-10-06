@@ -21,16 +21,16 @@
 .pill, .departure, .path, .arrival, .back { pointer-events: auto; }
 .back { align-self: center; font-size: 14px; padding: 10px 22px; }
 
-@media (min-width: 900px) {
+@media (min-width: 1100px) {
   .overlay {
     display: grid;
-    grid-template-columns: 380px 1fr 380px;
+    grid-template-columns: minmax(260px, 380px) minmax(340px, 1fr) minmax(260px, 380px);
     grid-template-rows: auto 1fr auto;
     gap: 12px 16px;
     padding: max(20px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left));
   }
   .top, .bottom { display: contents; }
-  .pill { grid-column: 2; grid-row: 1; justify-self: center; }
+  .pill { grid-column: 2; max-width: 100%; grid-row: 1; justify-self: center; }
   .departure { grid-column: 1; grid-row: 1 / span 2; align-self: start; }
   .arrival { grid-column: 3; grid-row: 1 / span 2; align-self: start; }
   .path { grid-column: 2; grid-row: 3; justify-self: center; align-self: end; }

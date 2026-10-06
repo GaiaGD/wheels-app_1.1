@@ -85,12 +85,38 @@ const from = { code: 'FCO', lat: 41.8, lon: 12.25 }
 const to = { code: 'JFK', lat: 40.64, lon: -73.78 }
 const STYLE = 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json'
 
+const mq = { wide: false, added: 0, removed: 0, listeners: [] as Array<() => void> }
+const ro = { instances: [] as Array<{ cb: () => void; disconnected: boolean }> }
+class FakeResizeObserver {
+  cb: () => void
+  disconnected = false
+  constructor(cb: () => void) {
+    this.cb = cb
+    ro.instances.push(this)
+  }
+  observe() {}
+  unobserve() {}
+  disconnect() {
+    this.disconnected = true
+  }
+}
+function setSize(w: number, h: number) {
+  Object.defineProperty(HTMLElement.prototype, 'clientWidth', { configurable: true, get: () => w })
+  Object.defineProperty(HTMLElement.prototype, 'clientHeight', { configurable: true, get: () => h })
+}
+
 function setReducedMotion(reduce: boolean) {
   window.matchMedia = ((q: string) => ({
-    matches: reduce && q.includes('prefers-reduced-motion'),
+    matches: q.includes('prefers-reduced-motion') ? reduce : q.includes('min-width') ? mq.wide : false,
     media: q,
-    addEventListener() {},
-    removeEventListener() {},
+    addEventListener(_t: string, cb: () => void) {
+      mq.added++
+      mq.listeners.push(cb)
+    },
+    removeEventListener(_t: string, cb: () => void) {
+      mq.removed++
+      mq.listeners = mq.listeners.filter((l) => l !== cb)
+    },
     addListener() {},
     removeListener() {},
     onchange: null,
@@ -101,6 +127,13 @@ function setReducedMotion(reduce: boolean) {
 beforeEach(() => {
   mocks.state.maps.length = 0
   mocks.state.markers.length = 0
+  mq.wide = false
+  mq.added = 0
+  mq.removed = 0
+  mq.listeners = []
+  ro.instances.length = 0
+  vi.stubGlobal('ResizeObserver', FakeResizeObserver)
+  setSize(390, 844)
   setReducedMotion(false)
 })
 
@@ -183,5 +216,87 @@ describe('FlightMap', () => {
     expect(() => map.fire('error')).not.toThrow()
     unmount()
     expect(map.removed).toBe(1)
+  })
+
+  describe('responsive fit padding', () => {
+    const pad = (i = 0) => mocks.state.maps[0].fitBoundsCalls[i].options.padding as Record<string, number>
+
+    it('uses top/bottom padding on phones and side padding on desktop, from the container size', () => {
+      setSize(390, 844)
+      const phone = render(<FlightMap from={from} to={to} plane={null} />)
+      mocks.state.maps[0].fire('load')
+      const p = pad()
+      expect(p.top).toBeGreaterThan(p.left)
+      phone.unmount()
+      mocks.state.maps.length = 0
+      mq.wide = true
+      setSize(1280, 800)
+      render(<FlightMap from={from} to={to} plane={null} />)
+      mocks.state.maps[0].fire('load')
+      const d = pad()
+      expect(d.left).toBeGreaterThan(d.top)
+      expect(d.left).toBeGreaterThan(300)
+    })
+
+    it('gives different padding for different container sizes', () => {
+      mq.wide = true
+      setSize(1100, 800)
+      const a = render(<FlightMap from={from} to={to} plane={null} />)
+      mocks.state.maps[0].fire('load')
+      const narrow = pad()
+      a.unmount()
+      mocks.state.maps.length = 0
+      setSize(1600, 800)
+      render(<FlightMap from={from} to={to} plane={null} />)
+      mocks.state.maps[0].fire('load')
+      expect(pad().left).toBeGreaterThan(narrow.left)
+    })
+
+    it('clamps padding on a short landscape phone so the area is not degenerate', () => {
+      setSize(740, 360)
+      render(<FlightMap from={from} to={to} plane={null} />)
+      mocks.state.maps[0].fire('load')
+      const p = pad()
+      expect(p.top + p.bottom).toBeLessThanOrEqual(360 * 0.7 + 0.001)
+      expect(p.left + p.right).toBeLessThanOrEqual(740 * 0.7 + 0.001)
+      expect(p.top).toBeGreaterThan(0)
+    })
+
+    it('re-fits when the container resizes, without animation under reduced motion', () => {
+      setReducedMotion(true)
+      render(<FlightMap from={from} to={to} plane={null} />)
+      const map = mocks.state.maps[0]
+      map.fire('load')
+      expect(map.fitBoundsCalls).toHaveLength(1)
+      setSize(390, 500)
+      ro.instances[0].cb()
+      expect(map.fitBoundsCalls).toHaveLength(2)
+      expect(map.fitBoundsCalls[1].options.animate).toBe(false)
+      expect(pad(1).top + pad(1).bottom).toBeLessThanOrEqual(500 * 0.7 + 0.001)
+    })
+
+    it('does not fit before the map has loaded', () => {
+      render(<FlightMap from={from} to={to} plane={null} />)
+      ro.instances[0].cb()
+      expect(mocks.state.maps[0].fitBoundsCalls).toHaveLength(0)
+    })
+
+    it('re-fits when the desktop breakpoint changes', () => {
+      render(<FlightMap from={from} to={to} plane={null} />)
+      const map = mocks.state.maps[0]
+      map.fire('load')
+      mq.wide = true
+      for (const l of mq.listeners) l()
+      expect(map.fitBoundsCalls).toHaveLength(2)
+    })
+
+    it('cleans up the observer and the media listener on unmount', () => {
+      const { unmount } = render(<FlightMap from={from} to={to} plane={null} />)
+      expect(ro.instances).toHaveLength(1)
+      expect(mq.added).toBeGreaterThan(0)
+      unmount()
+      expect(ro.instances[0].disconnected).toBe(true)
+      expect(mq.removed).toBe(mq.added)
+    })
   })
 })

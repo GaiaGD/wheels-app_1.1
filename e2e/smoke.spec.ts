@@ -92,6 +92,42 @@ test.describe('layout', () => {
     }
   })
 
+  test('1000x800 uses the phone layout: departure above arrival', async ({ page }) => {
+    await page.setViewportSize({ width: 1000, height: 800 })
+    await page.goto('/flight/AA100')
+    await expect(page.locator('section[aria-label="Departure"]')).toBeVisible()
+    const dep = await page.locator('section[aria-label="Departure"]').boundingBox()
+    const arr = await page.locator('section[aria-label="Arrival"]').boundingBox()
+    expect(dep && arr).toBeTruthy()
+    expect(dep!.y + dep!.height).toBeLessThanOrEqual(arr!.y)
+  })
+
+  for (const width of [1100, 1280, 1400]) {
+    test(`desktop ${width}x800: cards left/right, pill and path strip clear of both`, async ({ page }) => {
+      await page.setViewportSize({ width, height: 800 })
+      await page.goto('/flight/AA100')
+      const box = async (sel: string) => {
+        await expect(page.locator(sel).first()).toBeVisible()
+        const b = await page.locator(sel).first().boundingBox()
+        expect(b, sel).toBeTruthy()
+        return b!
+      }
+      const dep = await box('section[aria-label="Departure"]')
+      const arr = await box('section[aria-label="Arrival"]')
+      const pill = await box('[role="status"]')
+      const path = await box('section[aria-label="Flight path"]')
+      expect(arr.x).toBeGreaterThanOrEqual(dep.x + dep.width)
+      const overlaps = (a: typeof dep, b: typeof dep) =>
+        a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height
+      for (const [name, b] of [['pill', pill], ['path strip', path]] as const) {
+        expect(overlaps(b, dep), `${name} overlaps departure`).toBe(false)
+        expect(overlaps(b, arr), `${name} overlaps arrival`).toBe(false)
+        expect(b.x).toBeGreaterThanOrEqual(dep.x + dep.width)
+        expect(b.x + b.width).toBeLessThanOrEqual(arr.x)
+      }
+    })
+  }
+
   for (const size of [
     { width: 390, height: 844 },
     { width: 1280, height: 800 },

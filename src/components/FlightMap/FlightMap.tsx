@@ -31,6 +31,41 @@ function prefersReducedMotion(): boolean {
     : false
 }
 
+// Same breakpoint as FlightView.module.css: side cards from here up, stacked cards below.
+const DESKTOP_QUERY = '(min-width: 1100px)'
+const MAX_PAD_SHARE = 0.7
+
+interface Padding {
+  top: number
+  bottom: number
+  left: number
+  right: number
+}
+
+function clampPair(a: number, b: number, size: number): [number, number] {
+  const max = size * MAX_PAD_SHARE
+  const sum = a + b
+  if (size <= 0 || sum <= max) return [a, b]
+  const k = max / sum
+  return [a * k, b * k]
+}
+
+// Keeps the route clear of the floating cards: side cards on desktop, top/bottom cards on phones.
+// Never takes more than 70% of the container in either direction.
+export function fitPadding(width: number, height: number, wide: boolean): Padding {
+  let p: Padding
+  if (wide) {
+    const card = Math.min(380, Math.max(260, (width - 80 - 340) / 2))
+    const side = 24 + card + 16
+    p = { top: 80, bottom: 110, left: side, right: side }
+  } else {
+    p = { top: 300, bottom: 190, left: 40, right: 40 }
+  }
+  const [top, bottom] = clampPair(p.top, p.bottom, height)
+  const [left, right] = clampPair(p.left, p.right, width)
+  return { top, bottom, left, right }
+}
+
 function airportElement(code: string): HTMLElement {
   const el = document.createElement('div')
   el.className = styles.pin
@@ -81,6 +116,21 @@ export function FlightMap({ from, to, plane }: FlightMapProps) {
     map.on('error', () => {})
 
     const line = greatCircleLine(from, to)
+    const bounds = new LngLatBounds()
+    for (const point of line) bounds.extend(point)
+    const wide = window.matchMedia(DESKTOP_QUERY)
+    let loaded = false
+    const fit = (animate: boolean) => {
+      const width = container.clientWidth || window.innerWidth
+      const height = container.clientHeight || window.innerHeight
+      map.fitBounds(bounds, { padding: fitPadding(width, height, wide.matches), maxZoom: 6, animate })
+    }
+    const refit = () => {
+      if (loaded) fit(false)
+    }
+    wide.addEventListener('change', refit)
+    const observer = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(refit)
+    observer?.observe(container)
     map.on('load', () => {
       try {
         map.setProjection({ type: 'globe' })
@@ -100,13 +150,11 @@ export function FlightMap({ from, to, plane }: FlightMapProps) {
       })
       const bounds = new LngLatBounds()
       for (const point of line) bounds.extend(point)
-      // Keep the route clear of the floating cards: side cards on desktop, top/bottom cards on phones.
-      const wide = typeof window !== 'undefined' && window.innerWidth >= 900
-      const padding = wide ? { top: 80, bottom: 110, left: 430, right: 430 } : { top: 300, bottom: 190, left: 40, right: 40 }
-      map.fitBounds(bounds, { padding, maxZoom: 6, animate: !reduced })
+      loaded = true
+      fit(!reduced)
       // On small screens start with the attribution folded to its (i) button so it never covers the
       // "Check another flight" button; it still opens on tap.
-      if (!wide) container.querySelector('.maplibregl-ctrl-attrib')?.classList.remove('maplibregl-compact-show')
+      if (!wide.matches) container.querySelector('.maplibregl-ctrl-attrib')?.classList.remove('maplibregl-compact-show')
     })
 
     const markers = [from, to].map((a) =>
@@ -121,6 +169,8 @@ export function FlightMap({ from, to, plane }: FlightMapProps) {
     }
 
     return () => {
+      observer?.disconnect()
+      wide.removeEventListener('change', refit)
       for (const m of markers) m.remove()
       map.remove()
     }

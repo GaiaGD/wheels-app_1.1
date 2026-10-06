@@ -83,7 +83,7 @@
 }
 
 /* Desktop: the bottom-right corner holds "Check another flight", so credit the tiles bottom-left. */
-@media (min-width: 900px) {
+@media (min-width: 1100px) {
   .root :global(.maplibregl-ctrl-bottom-right) {
     right: auto;
     left: 0;
