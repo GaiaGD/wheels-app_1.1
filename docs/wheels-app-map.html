@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wheels App map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&family=Work+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  /* Layout: one column of figures read top to bottom. Colour carries where code runs: blue = browser, dark outline = server, amber = outside API. */
+  :root {
+    --bg: #ebebec;
+    --card: #ffffff;
+    --ink: #231f20;
+    --muted: #6a6667;
+    --line: #cfcfd1;
+    --browser: #1f5fa8;
+    --browser-bg: #e4eef9;
+    --api: #9a5b00;
+    --api-bg: #fbefd9;
+    --font-body: 'Work Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1a1819; --card: #252223; --ink: #ece9ea; --muted: #a09b9d; --line: #3b3738;
+      --browser: #7db4ec; --browser-bg: #1d2b3b; --api: #e0a24b; --api-bg: #35291a;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1a1819; --card: #252223; --ink: #ece9ea; --muted: #a09b9d; --line: #3b3738;
+    --browser: #7db4ec; --browser-bg: #1d2b3b; --api: #e0a24b; --api-bg: #35291a;
+    color-scheme: dark;
+  }
+
+  body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.55; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding-inline: 16px; padding-block: 32px 48px; display: grid; gap: 40px; }
+  h1 { font-size: 30px; font-weight: 600; margin: 0 0 6px; text-wrap: balance; }
+  h2 { font-size: 19px; font-weight: 600; margin: 0 0 4px; text-wrap: balance; }
+  p { margin: 0; max-width: 68ch; }
+  .lede { color: var(--muted); }
+  code { font-family: var(--font-mono); font-size: 0.88em; }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 12px 0 0; padding: 0; list-style: none; font-size: 13px; }
+  .legend li { display: flex; align-items: center; gap: 8px; }
+  .swatch { width: 22px; height: 14px; border-radius: 4px; border: 1.5px solid var(--ink); background: var(--card); }
+  .swatch.browser { border-color: var(--browser); background: var(--browser-bg); }
+  .swatch.api { border-color: var(--api); background: var(--api-bg); }
+  .swatch.dashed { border-style: dashed; }
+
+  figure { margin: 14px 0 0; display: grid; gap: 10px; }
+  .scroll { overflow-x: auto; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+  .scroll svg { display: block; width: 100%; min-width: 760px; height: auto; color: var(--ink); }
+  figcaption { color: var(--muted); font-size: 13.5px; max-width: 78ch; }
+
+  /* SVG parts, styled from the page so both themes follow the tokens */
+  .node { fill: var(--card); stroke: var(--ink); stroke-width: 1.5; }
+  .node.browser { fill: var(--browser-bg); stroke: var(--browser); }
+  .node.api { fill: var(--api-bg); stroke: var(--api); }
+  .node.dashed { stroke-dasharray: 5 4; }
+  .t-title { font: 600 13px var(--font-body); fill: var(--ink); }
+  .t-sub { font: 400 10.5px var(--font-mono); fill: var(--muted); }
+  .t-api { font: 400 10.5px var(--font-mono); fill: var(--api); }
+  .t-label { font: 400 10.5px var(--font-mono); fill: var(--muted); paint-order: stroke; stroke: var(--card); stroke-width: 5px; stroke-linejoin: round; }
+  .edge { fill: none; stroke: currentColor; stroke-width: 1.5; }
+  .edge.dashed { stroke-dasharray: 4 4; }
+
+  .table-wrap { overflow-x: auto; margin-top: 12px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; }
+  table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 14px; }
+  th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  tr:last-child td { border-bottom: 0; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .zero { color: var(--muted); }
+  body { margin: 0; }
+  :root { color-scheme: light; }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Wheels App map</h1>
+    <p class="lede">How a search turns into a flight page, where each file runs, and where your AeroDataBox quota goes.</p>
+    <ul class="legend" aria-label="Legend">
+      <li><span class="swatch browser"></span>Runs in the browser</li>
+      <li><span class="swatch"></span>Runs on the server</li>
+      <li><span class="swatch api"></span>Outside API</li>
+      <li><span class="swatch dashed"></span>Loads after the page (streamed)</li>
+    </ul>
+  </header>
+
+  <section aria-labelledby="h-journey">
+    <h2 id="h-journey">From the search form to a flight</h2>
+    <p class="lede">Only the form runs in the browser. It never calls an API: it builds a URL, and the server page behind that URL does the work.</p>
+    <figure>
+      <div class="scroll">
+        <svg viewBox="0 0 980 400" role="img" aria-label="SearchForm in the browser sends the user to the search page or straight to the flight page. The search page lists matches and links to the flight page. Both pages call AeroDataBox, and the flight page also calls OpenWeather and Unsplash.">
+          <defs>
+            <marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="currentColor"/></marker>
+          </defs>
+
+          <!-- edges first so boxes sit on top -->
+          <path class="edge" d="M240 190 C290 190 290 72 340 72" marker-end="url(#a1)"/>
+          <path class="edge" d="M240 210 C290 210 290 328 340 328" marker-end="url(#a1)"/>
+          <path class="edge" d="M460 104 V296" marker-end="url(#a1)"/>
+          <path class="edge" d="M580 72 H740" marker-end="url(#a1)"/>
+          <path class="edge" d="M580 318 L740 282" marker-end="url(#a1)"/>
+          <path class="edge" d="M580 340 L740 360" marker-end="url(#a1)"/>
+
+          <text class="t-label" x="304" y="128">/search?dep&amp;arr&amp;airline</text>
+          <text class="t-label" x="304" y="262">/flight/NH8407?date</text>
+          <text class="t-label" x="472" y="198">click a result</text>
+          <text class="t-label" x="472" y="214">/flight/NH8407?dep&amp;arr</text>
+          <text class="t-label" x="660" y="64" text-anchor="middle">departure boards</text>
+          <text class="t-label" x="664" y="292" text-anchor="middle">flight details</text>
+          <text class="t-label" x="664" y="386" text-anchor="middle">weather, photos</text>
+
+          <rect class="node browser" x="30" y="168" width="210" height="64" rx="8"/>
+          <text class="t-title" x="44" y="196">SearchForm</text>
+          <text class="t-sub" x="44" y="216">browser · builds a URL</text>
+
+          <rect class="node" x="340" y="40" width="240" height="64" rx="8"/>
+          <text class="t-title" x="354" y="68">search/page.tsx</text>
+          <text class="t-sub" x="354" y="88">server · lists matches</text>
+
+          <rect class="node" x="340" y="296" width="240" height="64" rx="8"/>
+          <text class="t-title" x="354" y="324">flight/[flightIata]/page.tsx</text>
+          <text class="t-sub" x="354" y="344">server · shows one flight</text>
+
+          <rect class="node api" x="740" y="36" width="210" height="72" rx="8"/>
+          <text class="t-title" x="754" y="62">AeroDataBox</text>
+          <text class="t-sub" x="754" y="80">time lookup + 2 boards</text>
+          <text class="t-api" x="754" y="96">5 units</text>
+
+          <rect class="node api" x="740" y="244" width="210" height="72" rx="8"/>
+          <text class="t-title" x="754" y="270">AeroDataBox</text>
+          <text class="t-sub" x="754" y="288">flight status</text>
+          <text class="t-api" x="754" y="304">2 units</text>
+
+          <rect class="node api" x="740" y="332" width="210" height="56" rx="8"/>
+          <text class="t-title" x="754" y="358">OpenWeather · Unsplash</text>
+          <text class="t-sub" x="754" y="376">no AeroDataBox units</text>
+        </svg>
+      </div>
+      <figcaption>The route tab goes through the search page and picks one flight from its list. The flight number tab skips the search page and goes straight to the flight page.</figcaption>
+    </figure>
+  </section>
+
+  <section aria-labelledby="h-flight">
+    <h2 id="h-flight">Inside the flight page</h2>
+    <p class="lede">One pipeline, top row, left to right. Every step returns data or a typed error, so a failure ends in a readable message and never a crash.</p>
+    <figure>
+      <div class="scroll">
+        <svg viewBox="0 0 1020 470" role="img" aria-label="The flight page validates the URL, calls getFlightDetails, which uses fetchJson to get a Result. A failed Result shows ErrorState. A good Result goes through pickFlight to FlightView, which draws two AirportCards and a FlightPath. Photos and weather stream in separately under each AirportCard.">
+          <defs>
+            <marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="currentColor"/></marker>
+          </defs>
+
+          <!-- row 1: the pipeline -->
+          <path class="edge" d="M180 62 H222" marker-end="url(#a2)"/>
+          <path class="edge" d="M382 62 H424" marker-end="url(#a2)"/>
+          <path class="edge" d="M584 62 H626" marker-end="url(#a2)"/>
+          <path class="edge" d="M786 62 H828" marker-end="url(#a2)"/>
+
+          <!-- branches -->
+          <path class="edge" d="M706 94 V170" marker-end="url(#a2)"/>
+          <path class="edge" d="M908 94 V170" marker-end="url(#a2)"/>
+          <text class="t-label" x="716" y="136">if not ok</text>
+          <text class="t-label" x="918" y="136">one Flight</text>
+
+          <!-- FlightView to its three parts -->
+          <path class="edge" d="M908 234 V268"/>
+          <path class="edge" d="M504 268 H908"/>
+          <path class="edge" d="M504 268 V300" marker-end="url(#a2)"/>
+          <path class="edge" d="M706 268 V300" marker-end="url(#a2)"/>
+          <path class="edge" d="M908 268 V300" marker-end="url(#a2)"/>
+
+          <!-- streamed extras -->
+          <path class="edge dashed" d="M504 364 V394" marker-end="url(#a2)"/>
+          <path class="edge dashed" d="M908 364 V394" marker-end="url(#a2)"/>
+          <text class="t-label" x="514" y="384">Suspense</text>
+          <text class="t-label" x="918" y="384">Suspense</text>
+
+          <rect class="node" x="20" y="30" width="160" height="64" rx="8"/>
+          <text class="t-title" x="34" y="58">validate.ts</text>
+          <text class="t-sub" x="34" y="78">URL → clean codes</text>
+
+          <rect class="node" x="222" y="30" width="160" height="64" rx="8"/>
+          <text class="t-title" x="236" y="58">getFlightDetails</text>
+          <text class="t-sub" x="236" y="78">aerodatabox.ts</text>
+
+          <rect class="node" x="424" y="30" width="160" height="64" rx="8"/>
+          <text class="t-title" x="438" y="58">fetchJson</text>
+          <text class="t-sub" x="438" y="78">timeout, retry, zod</text>
+
+          <rect class="node" x="626" y="30" width="160" height="64" rx="8"/>
+          <text class="t-title" x="640" y="58">Result</text>
+          <text class="t-sub" x="640" y="78">data or typed error</text>
+
+          <rect class="node" x="828" y="30" width="160" height="64" rx="8"/>
+          <text class="t-title" x="842" y="58">pickFlight</text>
+          <text class="t-sub" x="842" y="78">right day and leg</text>
+
+          <rect class="node" x="626" y="170" width="160" height="64" rx="8"/>
+          <text class="t-title" x="640" y="198">ErrorState</text>
+          <text class="t-sub" x="640" y="218">messages.ts wording</text>
+
+          <rect class="node" x="828" y="170" width="160" height="64" rx="8"/>
+          <text class="t-title" x="842" y="198">FlightView</text>
+          <text class="t-sub" x="842" y="218">status · progress</text>
+
+          <rect class="node" x="424" y="300" width="160" height="64" rx="8"/>
+          <text class="t-title" x="438" y="328">AirportCard</text>
+          <text class="t-sub" x="438" y="348">departure</text>
+
+          <rect class="node" x="626" y="300" width="160" height="64" rx="8"/>
+          <text class="t-title" x="640" y="328">FlightPath</text>
+          <text class="t-sub" x="640" y="348">+ StatusBanner</text>
+
+          <rect class="node" x="828" y="300" width="160" height="64" rx="8"/>
+          <text class="t-title" x="842" y="328">AirportCard</text>
+          <text class="t-sub" x="842" y="348">arrival</text>
+
+          <rect class="node dashed" x="424" y="394" width="160" height="56" rx="8"/>
+          <text class="t-title" x="438" y="420">photo + weather</text>
+          <text class="t-sub" x="438" y="438">stream in later</text>
+
+          <rect class="node dashed" x="828" y="394" width="160" height="56" rx="8"/>
+          <text class="t-title" x="842" y="420">photo + weather</text>
+          <text class="t-sub" x="842" y="438">stream in later</text>
+        </svg>
+      </div>
+      <figcaption>If <code>pickFlight</code> finds no entry for the airports or date you asked for, the page shows "couldn't confirm this flight" and never guesses. If a photo or weather call fails, only that card says "unavailable".</figcaption>
+    </figure>
+  </section>
+
+  <section aria-labelledby="h-quota">
+    <h2 id="h-quota">Where your AeroDataBox quota goes</h2>
+    <p class="lede">The free plan allows 400 units a month. Calls cost 1 or 2 units each, and cached results cost nothing.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Action</th><th class="num">Calls</th><th class="num">Units</th><th>Cached for</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Route search (<code>/search</code>)</td><td class="num">3</td><td class="num">5</td><td>boards 10 min, time lookup 1 hour</td></tr>
+          <tr><td>Flight page (<code>/flight/…</code>)</td><td class="num">1</td><td class="num">2</td><td>1 minute</td></tr>
+          <tr><td>Typing in the airport or airline fields</td><td class="num zero">0</td><td class="num zero">0</td><td>bundled data, no API</td></tr>
+          <tr><td>Weather and photos</td><td class="num zero">0</td><td class="num zero">0</td><td>other providers, own limits</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+</body>
+</html>
