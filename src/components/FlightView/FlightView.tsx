@@ -8,6 +8,7 @@ import type { AirportInfo, Flight } from '@/lib/flight/types'
 import { AirportCard } from '../AirportCard/AirportCard'
 import { FlightMapLoader } from '../FlightMap/FlightMapLoader'
 import { FlightPath } from '../FlightPath/FlightPath'
+import { haloButtonClass } from '../HaloButton/HaloButton'
 import { StatusBanner } from '../StatusBanner/StatusBanner'
 import styles from './FlightView.module.css'
 
@@ -69,7 +70,7 @@ export function FlightView({ flight, now, departurePhoto, arrivalPhoto, departur
           <div className={styles.arrival}>
             <AirportCard role="arrival" endpoint={flight.arrival} photo={arrivalPhoto} weather={arrivalWeather} />
           </div>
-          <Link href="/" className={`button ${styles.back}`}>Check another flight</Link>
+          <Link href="/" className={`${haloButtonClass} ${styles.back}`}>Check another flight</Link>
         </div>
       </div>
     </main>

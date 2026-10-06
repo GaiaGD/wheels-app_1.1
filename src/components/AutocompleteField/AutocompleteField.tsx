@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from 'react'
 import type { Suggestion } from '@/lib/autocomplete'
+import { HaloInput } from '../HaloInput/HaloInput'
 import styles from './AutocompleteField.module.css'
 
 interface Props {
@@ -125,14 +126,14 @@ export function AutocompleteField({ label, endpoint, placeholder, onSelect, erro
   return (
     <div className={styles.field}>
       <label htmlFor={id}>{label}</label>
-      <input
+      <HaloInput
         id={id}
         role="combobox"
         aria-expanded={open && items.length > 0}
         aria-controls={listId}
         aria-autocomplete="list"
         aria-activedescendant={active >= 0 ? `${id}-opt-${active}` : undefined}
-        aria-invalid={error ? true : undefined}
+        invalid={Boolean(error)}
         aria-describedby={error ? `${id}-err` : undefined}
         autoComplete="off"
         placeholder={placeholder}

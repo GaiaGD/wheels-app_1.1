@@ -48,6 +48,29 @@ test('home page works with the keyboard only', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'AA100' })).toBeVisible()
 })
 
+test.describe('halo input glow', () => {
+  const blobAnimation = (page: import('@playwright/test').Page) =>
+    page.locator('[data-halo-blob]').first().evaluate((el) => getComputedStyle(el).animationName)
+
+  test('blobs animate only while the field is focused', async ({ page }) => {
+    await page.goto('/')
+    const field = page.getByLabel('Departure airport')
+    expect(await blobAnimation(page)).toBe('none')
+    await field.focus()
+    await expect.poll(() => blobAnimation(page)).not.toBe('none')
+    await field.blur()
+    await expect.poll(() => blobAnimation(page)).toBe('none')
+  })
+
+  test('reduced motion keeps the glow static even when focused', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' })
+    await page.goto('/')
+    await page.getByLabel('Departure airport').focus()
+    await expect(page.getByLabel('Departure airport')).toBeFocused()
+    expect(await blobAnimation(page)).toBe('none')
+  })
+})
+
 test.describe('layout', () => {
   test('no horizontal overflow at 360px', async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 800 })
