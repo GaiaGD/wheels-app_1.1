@@ -79,4 +79,13 @@ describe('mock mode', () => {
     expect((await getAirportPhoto('Paris')).ok).toBe(true)
     expect(fetch).not.toHaveBeenCalled()
   })
+
+  it('fetches real photos in mock mode when USE_REAL_PHOTOS=true', async () => {
+    vi.stubEnv('USE_MOCK_DATA', 'true')
+    vi.stubEnv('USE_REAL_PHOTOS', 'true')
+    stubFetch({ results: [{ urls: { regular: 'https://img.test/real.jpg' } }] })
+    const res = await getAirportPhoto('Paris')
+    expect(fetch).toHaveBeenCalledTimes(1)
+    expect(res).toEqual({ ok: true, data: 'https://img.test/real.jpg' })
+  })
 })

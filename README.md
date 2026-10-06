@@ -14,6 +14,8 @@ Requires Node 20.9+ (22.12+ recommended; on 22.11 the Vitest DOM environment is 
 
 Mock mode is opt-in (`.env.example` defaults to `USE_MOCK_DATA=false`). Run `USE_MOCK_DATA=true npm run dev` to use fixtures (no keys, no API quota); every page then shows a "Demo data" banner. Try `/flight/AA100` (in the air), `BA117` (scheduled), `LH400` (landed), `DL1` (cancelled), `AF11` (diverted), `UA900` (delayed), `ER404` (provider down), `ER429` (rate limited), or `/search?dep=JFK&arr=LAX&airline=AA`.
 
+In mock mode airport photos are a fixed default; set `USE_REAL_PHOTOS=true` in `.env.local` to fetch real Unsplash photos anyway.
+
 ## Keys (server-only)
 
 | Variable | Service |
