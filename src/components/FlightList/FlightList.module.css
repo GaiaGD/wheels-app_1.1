@@ -1,4 +1,27 @@
-.list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
-.list a { display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; border-radius: var(--radius); background: var(--card); box-shadow: var(--shadow); font-size: 15px; color: var(--bg); text-decoration: none; transition: background 0.2s ease; }
-.list a:hover { background: #f4f4f4; }
-.list strong { font-size: 25px; font-weight: 400; }
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+.list a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 20px;
+  border-radius: var(--radius);
+  background: var(--card);
+  box-shadow: var(--shadow);
+  font-size: 15px;
+  color: var(--bg);
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+.list a:hover {
+  background: #f4f4f4;
+}
+.list strong {
+  font-size: 25px;
+  font-weight: 400;
+}

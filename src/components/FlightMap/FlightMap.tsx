@@ -31,9 +31,10 @@ function prefersReducedMotion(): boolean {
     : false
 }
 
-// Same breakpoint as FlightView.module.css: side cards from here up, stacked cards below.
+// Same breakpoint as FlightView.module.css: card panel on the left from here up, at the bottom below.
 const DESKTOP_QUERY = '(min-width: 1100px)'
 const MAX_PAD_SHARE = 0.7
+const PANEL_HEIGHT_SHARE = 0.3 // phones: the card panel is at most this share of the height (see .panel in FlightView.module.css)
 const EXTRA_PAD = 100 // desktop only: breathing room on every side, zooms the initial fit out a little
 
 interface Padding {
@@ -51,15 +52,16 @@ function clampPair(a: number, b: number, size: number): [number, number] {
   return [a * k, b * k]
 }
 
-// Keeps the route clear of the floating cards: a left column on desktop, top/bottom cards on phones.
+// Keeps the route clear of the card panel: a left column on desktop, the bottom of the screen on phones.
 // Never takes more than 70% of the container in either direction.
 export function fitPadding(width: number, height: number, wide: boolean): Padding {
   let p: Padding
   if (wide) {
-    // Cards stack in a left column (max 550px), so the route gets the space to its right.
+    // The panel is a left column (max 550px), so the route gets the space to its right.
     p = { top: 80 + EXTRA_PAD, bottom: 110 + EXTRA_PAD, left: 550 + 24 + 16 + EXTRA_PAD, right: 40 + EXTRA_PAD }
   } else {
-    p = { top: 300, bottom: 190, left: 40, right: 40 }
+    // The panel covers the bottom of the screen, so the route gets the part above it.
+    p = { top: 70, bottom: height * PANEL_HEIGHT_SHARE + 20, left: 40, right: 40 }
   }
   const [top, bottom] = clampPair(p.top, p.bottom, height)
   const [left, right] = clampPair(p.left, p.right, width)

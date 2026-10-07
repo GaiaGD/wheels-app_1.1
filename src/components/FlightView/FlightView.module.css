@@ -1,34 +1,93 @@
 /* Full-screen stage: the map is the background, the cards float on top.
    Stage is 100dvh minus the demo banner (28px, mock mode only); the footer sits below it. */
-.page { position: relative; height: calc(100dvh - var(--demo-banner-h, 0px)); overflow: hidden; background: var(--bg); }
-.map { position: absolute; inset: 0; }
+.page {
+  position: relative;
+  height: calc(100dvh - var(--demo-banner-h, 0px));
+  overflow: hidden;
+  background: var(--bg);
+}
+.map {
+  position: absolute;
+  inset: 0;
+}
 
-/* The overlay never blocks the map: only the cards and the button take pointer events. */
+/* All the cards live in one panel inside the overlay: at the bottom on phones, on the left on desktop.
+   The overlay itself never blocks the map; only the panel takes pointer events. */
 .overlay {
   position: absolute;
   inset: 0;
   z-index: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: 8px;
-  padding: max(10px, env(safe-area-inset-top)) max(10px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left));
+  justify-content: flex-end;
   pointer-events: none;
 }
-.top, .bottom { display: flex; flex-direction: column; min-width: 0; }
-.bottom { align-items: stretch; }
-.pill { align-self: center; }
-.pill, .departure, .path, .arrival, .back { pointer-events: auto; }
-.back { align-self: center; font-size: 14px; padding: 10px 22px; }
+/* Capped on phones so the map stays visible; the panel scrolls if the cards are taller than that. */
+.panel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-width: 0;
+  min-height: 0;
+  max-height: 60%;
+  overflow-y: auto;
+  pointer-events: auto;
+}
+.panel > * {
+  flex-shrink: 0;
+}
+
+.arrival {
+  text-align: right;
+}
+
+.departure > section {
+  border-radius: var(--radius) 0 0 0;
+}
+.arrival > section {
+  border-radius: 0 var(--radius) 0 0;
+}
+
+/* Phones: the two airports sit side by side and the aircraft card spans the row below them.
+   Desktop stacks them in DOM order, so it ends up between the two airports. */
+.aircraftInfo {
+  grid-column: 1 / -1;
+  grid-row: 2;
+}
+.pill {
+  align-self: center;
+}
+/* Stays in view at the bottom of the panel while the cards scroll. */
+.back {
+  position: sticky;
+  bottom: 0;
+  align-self: center;
+  font-size: 14px;
+  padding: 10px 22px;
+}
+
+
+/* Phones: the arrival card is the right-hand one, so its weather lines up to the right. */
+.arrival [data-weather] {
+  justify-content: end;
+}
 
 @media (min-width: 1100px) {
+  .arrival [data-weather] {
+    justify-content: start;
+  }
   .overlay {
     max-width: 550px;
     justify-content: center;
-    gap: 0;
+    padding: 20px;
+  }
+  .panel {
+    max-height: 100%;
+    display: flex;
+    flex-direction: column;
   }
   .arrival {
     margin-top: -1px;
+    text-align: left;
   }
   .departure > section {
     border-radius: var(--radius) var(--radius) 0 0;
@@ -46,10 +105,35 @@
     gap: 12px 16px;
     padding: max(20px, env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left));
   }
-  .top, .bottom { display: contents; }
-  .pill { grid-column: 2; max-width: 100%; grid-row: 1; justify-self: center; }
-  .departure { grid-column: 1; grid-row: 2 / span 2; align-self: center; }
-  .arrival { grid-column: 3; grid-row: 2 / span 2; align-self: center; }
-  .path { grid-column: 2; grid-row: 3; justify-self: center; align-self: end; }
-  .back { grid-column: 3; grid-row: 3; justify-self: end; align-self: end; }
+  .top, .bottom {
+    display: contents;
+  }
+  .pill {
+    grid-column: 2;
+    max-width: 100%;
+    grid-row: 1;
+    justify-self: center;
+  }
+  .departure {
+    grid-column: 1;
+    grid-row: 2 / span 2;
+    align-self: center;
+  }
+  .arrival {
+    grid-column: 3;
+    grid-row: 2 / span 2;
+    align-self: center;
+  }
+  .path {
+    grid-column: 2;
+    grid-row: 3;
+    justify-self: center;
+    align-self: end;
+  }
+  .back {
+    grid-column: 3;
+    grid-row: 3;
+    justify-self: end;
+    align-self: end;
+  }
 } */

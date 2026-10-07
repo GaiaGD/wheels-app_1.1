@@ -1,4 +1,21 @@
-.photo { position: absolute; inset: 0; background-size: cover; background-position: center; animation: fade 0.5s; }
-.skeleton { background: var(--bg); animation: none; }
-@keyframes fade { from { opacity: 0; } }
-@media (prefers-reduced-motion: reduce) { .photo { animation: none; } }
+.photo {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  animation: fade 0.5s;
+}
+.skeleton {
+  background: var(--bg);
+  animation: none;
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .photo {
+    animation: none;
+  }
+}

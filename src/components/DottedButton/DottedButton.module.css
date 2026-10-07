@@ -1,0 +1,41 @@
+/* Dark button with a field of pale dots that bulge away from the pointer on hover (see DotField). */
+.button {
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-height: 44px;
+  padding: 0 28px;
+  border: 1px solid var(--grey);
+  border-radius: 12px;
+  font: inherit;
+  font-size: 15px;
+  line-height: 1;
+  color: var(--pale, #d2d2d2);
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  background: var(--black);
+  box-shadow: var(--shadow-black);
+  transition: box-shadow 0.3s;
+}
+
+.label {
+  position: relative;
+}
+
+.button:not(:disabled):active {
+  box-shadow: var(--shadow-glow);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--pale, #d2d2d2);
+  outline-offset: 2px;
+}

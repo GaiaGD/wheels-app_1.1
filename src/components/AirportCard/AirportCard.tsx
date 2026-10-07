@@ -26,7 +26,6 @@ export function AirportCard({ role, endpoint, photo, weather }: Props) {
         <div className={styles.left}>
           <p className={styles.big}>{code}</p>
           <p>{[a.city, a.countryCode].filter(Boolean).join(', ')}</p>
-          <hr className={styles.divider} />
           {weather}
         </div>
         <div className={styles.right}>
@@ -34,7 +33,6 @@ export function AirportCard({ role, endpoint, photo, weather }: Props) {
           {showEstimate && (
             <p>{endpoint.actualLocal ? 'Actual' : 'Estimated'}: {estimated}</p>
           )}
-          <hr className={styles.divider} />
           <p>Terminal: {endpoint.terminal ?? <Unavailable />}</p>
           <p>Gate: {endpoint.gate ?? <Unavailable />}</p>
           {role === 'departure' && <p>Check-in desk: {endpoint.checkInDesk ?? <Unavailable />}</p>}

@@ -1,23 +1,28 @@
-.form { display: grid; gap: 30px; width: 100%; max-width: 420px; margin: 0 auto; }
+.form {
+  display: grid;
+  gap: 30px;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+}
 /* Two-option toggle: a pill with a thumb that slides under the selected tab (cheap: transform only). */
 .tabs {
-  --halo-ink: var(--pale, #f4f4f4);
   position: relative;
   isolation: isolate;
+  overflow: hidden;
   display: grid;
   grid-template-columns: 1fr 1fr;
   justify-self: center;
   width: min(100%, 320px);
   padding: 3px;
-  border: 1px solid transparent;
+  border: 1px solid var(--grey);
   border-radius: 999px;
-  background:
-    linear-gradient(var(--grey, #101010), var(--grey, #101010)) padding-box,
-    linear-gradient(135deg,
-      color-mix(in oklab, #00d4ff 45%, transparent),
-      color-mix(in oklab, var(--halo-ink) 12%, transparent) 40%,
-      color-mix(in oklab, #ff0080 45%, transparent)) border-box;
-  box-shadow: inset 0 1px 0 color-mix(in oklab, var(--halo-ink) 14%, transparent), 0 2px 8px rgba(0, 0, 0, 0.25);
+  color: var(--pale);
+  box-shadow: var(--shadow-black);
+}
+/* Dots (DotField) sit behind the thumb, which sits behind the tab labels. */
+.dots {
+  z-index: -2;
 }
 .tabs::before {
   content: '';
@@ -28,11 +33,12 @@
   left: 3px;
   width: calc((100% - 6px) / 2);
   border-radius: 999px;
-  background: var(--bg);
-  box-shadow: inset 0 1px 0 color-mix(in oklab, var(--halo-ink) 20%, transparent), 0 0 0 1px color-mix(in oklab, var(--halo-ink) 16%, transparent);
+  background: var(--black);
   transition: transform 0.2s ease;
 }
-.tabs[data-tab='number']::before { transform: translateX(100%); }
+.tabs[data-tab='number']::before {
+  transform: translateX(100%);
+}
 .tabs button {
   font: inherit;
   font-size: 13px;
@@ -40,17 +46,40 @@
   border: 0;
   border-radius: 999px;
   background: transparent;
-  color: color-mix(in oklab, var(--halo-ink) 60%, transparent);
+  text-shadow: var(--text-shadow-black);
+  color: var(--muted);
   cursor: pointer;
   transition: color 0.2s ease;
 }
-.tabs button[aria-selected='true'] { color: var(--halo-ink); }
-@media (prefers-reduced-motion: reduce) {
-  .tabs::before, .tabs button { transition: none; }
+.tabs button[aria-selected='true'] {
+  color: var(--pale);
 }
-.fields { display: grid; gap: 22px; }
-.field { display: grid; gap: 4px; }
-.field label { font-size: 12px; }
-.date { color-scheme: dark; }
-.hint { margin: 0; font-size: 11px; text-align: center; }
-.error { margin: 0; font-size: 12px; font-weight: 600; }
+@media (prefers-reduced-motion: reduce) {
+  .tabs::before, .tabs button {
+    transition: none;
+  }
+}
+.fields {
+  display: grid;
+  gap: 22px;
+}
+.field {
+  display: grid;
+  gap: 4px;
+}
+.field label {
+  font-size: 12px;
+}
+.date {
+  color-scheme: dark;
+}
+.hint {
+  margin: 0;
+  font-size: 11px;
+  text-align: center;
+}
+.error {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+}

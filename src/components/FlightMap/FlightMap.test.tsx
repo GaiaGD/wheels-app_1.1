@@ -221,12 +221,13 @@ describe('FlightMap', () => {
   describe('responsive fit padding', () => {
     const pad = (i = 0) => mocks.state.maps[0].fitBoundsCalls[i].options.padding as Record<string, number>
 
-    it('uses top/bottom padding on phones and side padding on desktop, from the container size', () => {
+    it('keeps the route above the bottom panel on phones and right of the left panel on desktop, from the container size', () => {
       setSize(390, 844)
       const phone = render(<FlightMap from={from} to={to} plane={null} />)
       mocks.state.maps[0].fire('load')
       const p = pad()
-      expect(p.top).toBeGreaterThan(p.left)
+      expect(p.bottom).toBeGreaterThan(p.top)
+      expect(p.bottom).toBeGreaterThan(p.left)
       phone.unmount()
       mocks.state.maps.length = 0
       mq.wide = true

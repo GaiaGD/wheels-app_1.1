@@ -4,8 +4,8 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { parseDate, parseFlightNumber } from '@/lib/validate'
 import { AutocompleteField } from '../AutocompleteField/AutocompleteField'
-import { HaloButton } from '../HaloButton/HaloButton'
-import { HaloInput } from '../HaloInput/HaloInput'
+import { DotField } from '../DotField/DotField'
+import { DottedButton } from '../DottedButton/DottedButton'
 import styles from './SearchForm.module.css'
 
 type Tab = 'route' | 'number'
@@ -64,6 +64,7 @@ export function SearchForm() {
       }}
     >
       <div role="tablist" aria-label="Search type" className={styles.tabs} data-tab={tab}>
+        <DotField className={styles.dots} />
         <button type="button" role="tab" aria-selected={tab === 'route'} onClick={() => switchTab('route')}>By route</button>
         <button type="button" role="tab" aria-selected={tab === 'number'} onClick={() => switchTab('number')}>By flight number</button>
       </div>
@@ -79,19 +80,19 @@ export function SearchForm() {
         <div role="tabpanel" className={styles.fields}>
           <div className={styles.field}>
             <label htmlFor="flight-number">Flight number</label>
-            <HaloInput id="flight-number" value={number} placeholder="AA123" autoComplete="off" onChange={(e) => setNumber(e.target.value)} aria-invalid={errors.number ? true : undefined} aria-describedby={errors.number ? 'flight-number-error' : undefined} />
+            <input id="flight-number" value={number} placeholder="AA123" autoComplete="off" onChange={(e) => setNumber(e.target.value)} aria-invalid={errors.number ? true : undefined} aria-describedby={errors.number ? 'flight-number-error' : undefined} />
             {errors.number && <p id="flight-number-error" role="alert" className={styles.error}>{errors.number}</p>}
           </div>
           <div className={styles.field}>
             <label htmlFor="flight-date">Date (optional)</label>
-            <HaloInput id="flight-date" type="date" className={styles.date} value={date} onChange={(e) => setDate(e.target.value)} aria-invalid={errors.date ? true : undefined} aria-describedby={errors.date ? 'flight-date-error' : undefined} />
+            <input id="flight-date" type="date" className={styles.date} value={date} onChange={(e) => setDate(e.target.value)} aria-invalid={errors.date ? true : undefined} aria-describedby={errors.date ? 'flight-date-error' : undefined} />
             {errors.date && <p id="flight-date-error" role="alert" className={styles.error}>{errors.date}</p>}
           </div>
           <p className={styles.hint}>Works for past, current and upcoming flights.</p>
         </div>
       )}
 
-      <HaloButton type="submit">Search</HaloButton>
+      <DottedButton type="submit">Search</DottedButton>
     </form>
   )
 }

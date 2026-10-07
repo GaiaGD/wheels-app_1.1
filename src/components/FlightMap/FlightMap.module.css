@@ -69,8 +69,8 @@
 
 .estimate {
   position: absolute;
-  /* clear of the floating cards: just above the arrival card on phones, above the path strip on desktop */
-  bottom: 210px;
+  /* clear of the card panel: at the top on phones (the panel is at the bottom), bottom-centre of the free area on desktop */
+  top: max(12px, env(safe-area-inset-top));
   left: 50%;
   transform: translateX(-50%);
   padding: 4px 10px;
@@ -90,6 +90,8 @@
   }
 
   .estimate {
-    bottom: 130px;
+    top: auto;
+    bottom: 24px;
+    left: calc(50% + 275px);
   }
 }

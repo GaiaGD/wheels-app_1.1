@@ -14,9 +14,9 @@ const schema = z.object({
 
 export async function getWeather(lat: number, lon: number): Promise<Result<Weather>> {
   if (!Number.isFinite(lat) || !Number.isFinite(lon)) return fail('bad_input', PROVIDER, 'Bad coordinates')
-  if (isMockMode()) {
-    return ok({ tempC: 18, tempF: 64, condition: 'Clouds', iconUrl: 'https://openweathermap.org/img/wn/04d@2x.png' })
-  }
+  // if (isMockMode()) {
+  //   return ok({ tempC: 18, tempF: 64, condition: 'Clouds', iconUrl: 'https://openweathermap.org/img/wn/04d@2x.png' })
+  // }
   const key = requireKey('OPENWEATHER_API_KEY', PROVIDER)
   if (!key.ok) return key
 

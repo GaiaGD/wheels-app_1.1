@@ -1,20 +1,75 @@
-.aircraft { display: grid; gap: 2px; text-align: center; padding: 8px 14px 6px; background: var(--card); border-radius: var(--radius); color: var(--bg); }
-.code { display: flex; flex-direction: column; justify-content: center; min-width: 0; }
-.code p, .code h1 { margin: 0; }
-.code p { font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.code h1 { font-size: 20px; line-height: 1.2; }
-.track { position: relative; width: 95%; margin: 4px auto; height: 20px; }
-.line { position: absolute; top: 10px; left: 0; right: 0; border-bottom: 1px dashed var(--pale); }
-.plane { position: absolute; top: 0; height: 20px; width: 20px; left: var(--progress, 0%); transform: translateX(-50%); animation: fly 2.5s ease-out; }
-.countdown { margin: 0; font-size: 12px; }
-@keyframes fly { from { left: 0%; } }
-@media (prefers-reduced-motion: reduce) { .plane { animation: none; } }
+.aircraft {
+  display: grid;
+  gap: 2px;
+  text-align: center;
+  padding: 8px 14px 6px;
+  background: var(--card);
+  color: var(--bg);
+}
+.code {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+}
+.code p, .code h1 {
+  margin: 0;
+}
+.code p {
+  font-size: 11px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.code h1 {
+  font-size: 20px;
+  line-height: 1.2;
+}
+.track {
+  position: relative;
+  width: 95%;
+  margin: 4px auto;
+  height: 20px;
+}
+.line {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  right: 0;
+  border-bottom: 1px dashed var(--pale);
+}
+.plane {
+  position: absolute;
+  top: 0;
+  height: 20px;
+  width: 20px;
+  left: var(--progress, 0%);
+  transform: translateX(-50%);
+  animation: fly 2.5s ease-out;
+}
+.countdown {
+  margin: 0;
+  font-size: 12px;
+}
+@keyframes fly {
+  from {
+    left: 0%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .plane {
+    animation: none;
+  }
+}
 
 @media (min-width: 1100px) {
   .aircraft {
     margin-top: -1px;
     --notch: 14px;
-    width: 100%; box-sizing: border-box; border-radius: 0; padding: 10px 28px;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 0;
+    padding: 10px 28px;
     -webkit-mask:
       radial-gradient(circle var(--notch) at 0 50%, #0000 98%, #000) left / 51% 100% no-repeat,
       radial-gradient(circle var(--notch) at 100% 50%, #0000 98%, #000) right / 51% 100% no-repeat;
@@ -23,9 +78,8 @@
       radial-gradient(circle var(--notch) at 100% 50%, #0000 98%, #000) right / 51% 100% no-repeat;
   }
   .code {
-    /* dash 4px, gap 8px — tweak the two numbers to change the spacing */
-    --dashes: repeating-linear-gradient(90deg, var(--grey) 0 4px, transparent 4px 12px);
-    background: var(--dashes) top / 100% 1px no-repeat, var(--dashes) bottom / 100% 1px no-repeat;
+    border-top: 1px dashed var(--darkGrey);
+    border-bottom: 1px dashed var(--darkGrey);
     padding: 8px 0;
   }
 }

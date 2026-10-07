@@ -8,7 +8,7 @@ import type { AirportInfo, Flight } from '@/lib/flight/types'
 import { AirportCard } from '../AirportCard/AirportCard'
 import { FlightMapLoader } from '../FlightMap/FlightMapLoader'
 import { AircraftInfo } from '../AircraftInfo/AircraftInfo'
-import { haloButtonClass } from '../HaloButton/HaloButton'
+import { dottedButtonClass } from '../DottedButton/DottedButton'
 import { StatusBanner } from '../StatusBanner/StatusBanner'
 import styles from './FlightView.module.css'
 
@@ -48,10 +48,10 @@ export function FlightView({ flight, now, departurePhoto, arrivalPhoto, departur
         </div>
       )}
       <div className={styles.overlay}>
-        <div className={styles.top}>
-          <div className={styles.pill}>
+        <div className={styles.panel}>
+          {/* <div className={styles.pill}>
             <StatusBanner status={status} delayMinutes={bannerDelay} />
-          </div>
+          </div> */}
           <div className={styles.departure}>
             <AirportCard role="departure" endpoint={flight.departure} photo={departurePhoto} weather={departureWeather} />
           </div>
@@ -65,14 +65,13 @@ export function FlightView({ flight, now, departurePhoto, arrivalPhoto, departur
               aircraft={flight.aircraftModel}
             />
           </div>
-        </div>
-        <div className={styles.bottom}>
           <div className={styles.arrival}>
             <AirportCard role="arrival" endpoint={flight.arrival} photo={arrivalPhoto} weather={arrivalWeather} />
           </div>
-          <Link href="/" className={`${haloButtonClass} ${styles.back}`}>Check another flight</Link>
         </div>
       </div>
+      <Link href="/" className={`${dottedButtonClass} ${styles.back}`}>Check another flight</Link>
+
     </main>
   )
 }

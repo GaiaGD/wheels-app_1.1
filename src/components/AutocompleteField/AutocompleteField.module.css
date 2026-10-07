@@ -1,10 +1,55 @@
-.field { position: relative; display: grid; gap: 10px; }
-.field label { font-size: 14px; }
-.list { position: absolute; z-index: 5; top: 100%; left: 0; right: 0; margin: 4px 0 0; padding: 0; list-style: none; max-height: 300px; overflow: auto; background: color-mix(in oklab, var(--bg) 88%, var(--pale)); color: var(--pale); border: 1px solid color-mix(in oklab, var(--pale) 22%, transparent); border-radius: var(--radius); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45); }
-.list li { display: grid; gap: 4px; padding: 12px 16px; border-bottom: 1px solid color-mix(in oklab, var(--pale) 12%, transparent); cursor: pointer; transition: background 0.5s; }
-.list li:hover { background: color-mix(in oklab, var(--pale) 10%, transparent); }
-.list li:last-child { border-bottom: 0; }
-.list li span { font-size: 12px; opacity: 0.75; }
-.active { background: color-mix(in oklab, var(--pale) 10%, transparent); }
-.note { margin: 0; font-size: 11px; }
-.error { margin: 0; font-size: 12px; font-weight: 600; }
+.field {
+  position: relative;
+  display: grid;
+  gap: 10px;
+}
+.field label {
+  font-size: 14px;
+}
+.list {
+  position: absolute;
+  z-index: 5;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+  max-height: 300px;
+  overflow: auto;
+  background: var(--black);
+  color: var(--pale);
+  border: 1px solid color-mix(in oklab, var(--pale) 22%, transparent);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+.list li {
+  display: grid;
+  gap: 4px;
+  padding: 12px 16px;
+  border-bottom: 1px solid color-mix(in oklab, var(--pale) 12%, transparent);
+  cursor: pointer;
+  transition: background 0.5s;
+}
+.list li:hover {
+  background: color-mix(in oklab, var(--pale) 10%, transparent);
+}
+.list li:last-child {
+  border-bottom: 0;
+}
+.list li span {
+  font-size: 12px;
+  opacity: 0.75;
+}
+.active {
+  background: color-mix(in oklab, var(--pale) 10%, transparent);
+}
+.note {
+  margin: 0;
+  font-size: 11px;
+}
+.error {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+}
