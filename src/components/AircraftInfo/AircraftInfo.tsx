@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react'
 import { planeFraction } from '@/lib/flight/progress'
 import type { FlightStatus } from '@/lib/flight/status'
-import styles from './FlightPath.module.css'
+import styles from './AircraftInfo.module.css'
 
 interface Props {
   progress: number | null
@@ -12,16 +12,16 @@ interface Props {
   aircraft: string | null
 }
 
-export function FlightPath({ progress, status, countdown, flightNumber, airline, aircraft }: Props) {
+export function AircraftInfo({ progress, status, countdown, flightNumber, airline, aircraft }: Props) {
   const position = planeFraction(status, progress)
   return (
-    <section className={styles.path} aria-label="Flight path">
+    <section className={styles.aircraft} aria-label="Flight information">
       <div className={styles.code}>
         <p>{aircraft ?? 'FLIGHT'}</p>
         <h1>{flightNumber}</h1>
         {airline && <p>{airline}</p>}
       </div>
-      <div className={styles.track}>
+      {/* <div className={styles.track}>
         <div className={styles.line} />
         {position !== null && (
           // eslint-disable-next-line @next/next/no-img-element -- decorative/remote icon
@@ -32,7 +32,7 @@ export function FlightPath({ progress, status, countdown, flightNumber, airline,
             style={{ '--progress': `${Math.round(position * 100)}%` } as CSSProperties}
           />
         )}
-      </div>
+      </div> */}
       {countdown && <p className={styles.countdown}>Departs in {countdown}</p>}
     </section>
   )

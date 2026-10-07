@@ -7,7 +7,7 @@ import { bestUtc, delayMinutes, formatDuration } from '@/lib/flight/time'
 import type { AirportInfo, Flight } from '@/lib/flight/types'
 import { AirportCard } from '../AirportCard/AirportCard'
 import { FlightMapLoader } from '../FlightMap/FlightMapLoader'
-import { FlightPath } from '../FlightPath/FlightPath'
+import { AircraftInfo } from '../AircraftInfo/AircraftInfo'
 import { haloButtonClass } from '../HaloButton/HaloButton'
 import { StatusBanner } from '../StatusBanner/StatusBanner'
 import styles from './FlightView.module.css'
@@ -55,8 +55,8 @@ export function FlightView({ flight, now, departurePhoto, arrivalPhoto, departur
           <div className={styles.departure}>
             <AirportCard role="departure" endpoint={flight.departure} photo={departurePhoto} weather={departureWeather} />
           </div>
-          <div className={styles.path}>
-            <FlightPath
+          <div className={styles.aircraftInfo}>
+            <AircraftInfo
               progress={progress}
               status={status}
               countdown={countdown}

@@ -249,7 +249,8 @@ describe('FlightMap', () => {
       setSize(1600, 800)
       render(<FlightMap from={from} to={to} plane={null} />)
       mocks.state.maps[0].fire('load')
-      expect(pad().left).toBeGreaterThan(narrow.left)
+      expect(pad().left).toBeGreaterThanOrEqual(narrow.left)
+      expect(pad().left).toBeGreaterThan(pad().right)
     })
 
     it('clamps padding on a short landscape phone so the area is not degenerate', () => {

@@ -9,6 +9,7 @@ export async function AirportPhoto({ city }: { city: string }) {
   } catch {
     // fall back to the default photo
   }
+  console.log('AirportPhoto', { city, url })
   return (
     <div
       className={styles.photo}

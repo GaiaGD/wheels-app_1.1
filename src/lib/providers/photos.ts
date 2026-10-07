@@ -16,7 +16,7 @@ const schema = z.object({
 export async function getAirportPhoto(city: string): Promise<Result<string>> {
   const query = city.trim()
   if (!query) return fail('bad_input', PROVIDER, 'Empty city')
-  if (isMockMode() && process.env.USE_REAL_PHOTOS !== 'true') return ok(DEFAULT_AIRPORT_PHOTO)
+  // if (isMockMode() && process.env.USE_REAL_PHOTOS !== 'true') return ok(DEFAULT_AIRPORT_PHOTO)
 
   const key = requireKey('UNSPLASH_ACCESS_KEY', PROVIDER)
   if (!key.ok) return key
