@@ -33,7 +33,7 @@ function prefersReducedMotion(): boolean {
 
 // Same breakpoint as FlightView.module.css: card panel on the left from here up, at the bottom below.
 const DESKTOP_QUERY = '(min-width: 1100px)'
-const MAX_PAD_SHARE = 0.7
+const MAX_PAD_SHARE = 0.5
 const PANEL_HEIGHT_SHARE = 0.3 // phones: the card panel is at most this share of the height (see .panel in FlightView.module.css)
 const EXTRA_PAD = 100 // desktop only: breathing room on every side, zooms the initial fit out a little
 

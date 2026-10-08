@@ -7,12 +7,12 @@
   text-align: center;
 }
 .in_air {
-  background: var(--pale);
+  background: var(--green);
   color: var(--bg);
 }
 .delayed {
-  border: 1px solid var(--pale);
+  border: 1px solid var(--yellow);
 }
 .cancelled, .diverted {
-  border: 1px dashed var(--pale);
+  border: 1px dashed var(--red);
 }

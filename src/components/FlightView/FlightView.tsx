@@ -55,6 +55,9 @@ export function FlightView({ flight, now, departurePhoto, arrivalPhoto, departur
           <div className={styles.departure}>
             <AirportCard role="departure" endpoint={flight.departure} photo={departurePhoto} weather={departureWeather} />
           </div>
+          <div className={styles.pill}>
+            <StatusBanner status={status} delayMinutes={bannerDelay} />
+          </div>
           <div className={styles.aircraftInfo}>
             <AircraftInfo
               progress={progress}

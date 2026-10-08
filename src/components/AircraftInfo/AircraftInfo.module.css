@@ -78,8 +78,13 @@
       radial-gradient(circle var(--notch) at 100% 50%, #0000 98%, #000) right / 51% 100% no-repeat;
   }
   .code {
-    border-top: 1px dashed var(--darkGrey);
+    border-top: none;
     border-bottom: 1px dashed var(--darkGrey);
-    padding: 8px 0;
+    padding: 15px 0 8px;
+  }
+
+  .code p:first-child {
+    padding-top: 20px;
+    border-top: 1px dashed var(--darkGrey);
   }
 }
