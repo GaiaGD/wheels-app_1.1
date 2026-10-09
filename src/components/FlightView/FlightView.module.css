@@ -29,7 +29,6 @@
   min-width: 0;
   min-height: 0;
   max-height: 60%;
-  overflow-y: auto;
   pointer-events: auto;
   position: relative;
 }
@@ -37,14 +36,16 @@
   flex-shrink: 0;
 }
 
-.arrival {
-  text-align: right;
+.departure, .arrival {
+  background: var(--card);
 }
 
-.departure > section {
+.departure {
   border-radius: var(--radius) 0 0 0;
 }
-.arrival > section {
+
+.arrival {
+  text-align: right;
   border-radius: 0 var(--radius) 0 0;
 }
 
@@ -53,17 +54,16 @@
 .aircraftInfo {
   grid-column: 1 / -1;
   grid-row: 2;
+  border-top: 1px dashed var(--pale);
 }
+
 .pill {
   align-self: center;
-}
-/* Stays in view at the bottom of the panel while the cards scroll. */
-.back {
-  position: sticky;
-  bottom: 0;
-  align-self: center;
-  font-size: 14px;
-  padding: 10px 22px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
 }
 
 
@@ -77,7 +77,7 @@
     justify-content: start;
   }
   .overlay {
-    max-width: 400px;
+    max-width: 500px;
     justify-content: center;
     padding: 20px;
   }
@@ -85,21 +85,25 @@
     max-height: 100%;
     display: flex;
     flex-direction: column;
+    /* Soft shadow around the stacked cards. A filter follows their real outline, notches included. */
+    filter: drop-shadow(0 0 20px #00000090);
   }
+
+  .departure {
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
+
   .arrival {
     margin-top: -1px;
     text-align: left;
-  }
-  .departure > section {
-    border-radius: var(--radius) var(--radius) 0 0;
-  }
-  .arrival > section {
     border-radius: 0 0 var(--radius) var(--radius);
+  }
+
+  .arrival > section {
     flex-direction: column-reverse;
   }
   .pill {
-    position: absolute;
-    top: 46%;
+    top: 43%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 2;

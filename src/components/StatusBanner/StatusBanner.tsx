@@ -6,6 +6,7 @@ const LABELS: Record<FlightStatus, string> = {
   delayed: 'Delayed',
   in_air: 'In the air',
   landed: 'Landed',
+  landed_late: 'Landed late',
   cancelled: 'Cancelled',
   diverted: 'Diverted',
 }
@@ -17,13 +18,14 @@ function delayText(minutes: number | null): string | null {
   return 'On time'
 }
 
-export function StatusBanner({ status, delayMinutes }: { status: FlightStatus; delayMinutes: number | null }) {
+export function StatusBanner({ status, delayMinutes, countdown }: { status: FlightStatus; delayMinutes: number | null; countdown?: string | null }) {
   const showDelay = status !== 'cancelled' && status !== 'diverted'
   const extra = showDelay ? delayText(delayMinutes) : null
+  const countdownText = countdown ? ` in ${countdown}` : null
   return (
     <div role="status" className={`${styles.banner} ${styles[status] ?? ''}`}>
       <strong>{LABELS[status]}</strong>
-      {extra && <span> · {extra}</span>}
+      {extra && <span> · {extra}</span>} {countdownText && <span> · {countdownText}</span>}
     </div>
   )
 }

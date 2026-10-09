@@ -65,17 +65,17 @@
 @media (min-width: 1100px) {
   .aircraft {
     margin-top: -1px;
-    --notch: 14px;
+    --notch: 20px;
     width: 100%;
     box-sizing: border-box;
     border-radius: 0;
     padding: 10px 28px;
     -webkit-mask:
-      radial-gradient(circle var(--notch) at 0 50%, #0000 98%, #000) left / 51% 100% no-repeat,
-      radial-gradient(circle var(--notch) at 100% 50%, #0000 98%, #000) right / 51% 100% no-repeat;
+      radial-gradient(circle var(--notch) at 0 56%, #0000009b 98%, #000) left / 51% 100% no-repeat,
+      radial-gradient(circle var(--notch) at 100% 56%, #0000 98%, #000) right / 51% 100% no-repeat;
     mask:
-      radial-gradient(circle var(--notch) at 0 50%, #0000 98%, #000) left / 51% 100% no-repeat,
-      radial-gradient(circle var(--notch) at 100% 50%, #0000 98%, #000) right / 51% 100% no-repeat;
+      radial-gradient(circle var(--notch) at 0 56%, #0000 98%, #000) left / 51% 100% no-repeat,
+      radial-gradient(circle var(--notch) at 100% 56%, #0000 98%, #000) right / 51% 100% no-repeat;
   }
   .code {
     border-top: none;

@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import type { ReactNode } from 'react'
 import { planePosition } from '@/lib/flight/geo'
 import { deriveStatus } from '@/lib/flight/status'
@@ -8,7 +7,7 @@ import type { AirportInfo, Flight } from '@/lib/flight/types'
 import { AirportCard } from '../AirportCard/AirportCard'
 import { FlightMapLoader } from '../FlightMap/FlightMapLoader'
 import { AircraftInfo } from '../AircraftInfo/AircraftInfo'
-import { dottedButtonClass } from '../DottedButton/DottedButton'
+import { DottedLink } from '../DottedButton/DottedButton'
 import { StatusBanner } from '../StatusBanner/StatusBanner'
 import styles from './FlightView.module.css'
 
@@ -33,7 +32,7 @@ export function FlightView({ flight, now, departurePhoto, arrivalPhoto, departur
     (status === 'scheduled' || status === 'delayed') && !Number.isNaN(depTime) && depTime > now.getTime()
       ? formatDuration(depTime - now.getTime())
       : null
-  const bannerDelay = status === 'landed' ? delayMinutes(flight.arrival) : delayMinutes(flight.departure)
+  const bannerDelay = status === 'landed' || status === 'landed_late' ? delayMinutes(flight.arrival) : delayMinutes(flight.departure)
   const progress = flightProgress(flight, now)
 
   const from = mapAirport(flight.departure.airport)
@@ -56,13 +55,12 @@ export function FlightView({ flight, now, departurePhoto, arrivalPhoto, departur
             <AirportCard role="departure" endpoint={flight.departure} photo={departurePhoto} weather={departureWeather} />
           </div>
           <div className={styles.pill}>
-            <StatusBanner status={status} delayMinutes={bannerDelay} />
+            <StatusBanner status={status} delayMinutes={bannerDelay} countdown={countdown} />
           </div>
           <div className={styles.aircraftInfo}>
             <AircraftInfo
               progress={progress}
-              status={status}
-              countdown={countdown}
+              status={status} 
               flightNumber={flight.number}
               airline={flight.airlineName}
               aircraft={flight.aircraftModel}
@@ -71,10 +69,12 @@ export function FlightView({ flight, now, departurePhoto, arrivalPhoto, departur
           <div className={styles.arrival}>
             <AirportCard role="arrival" endpoint={flight.arrival} photo={arrivalPhoto} weather={arrivalWeather} />
           </div>
+          <DottedLink href="/" className={styles.back} arrow="left">
+            Check another flight
+          </DottedLink>
+
         </div>
       </div>
-      <Link href="/" className={`${dottedButtonClass} ${styles.back}`}>Check another flight</Link>
-
     </main>
   )
 }

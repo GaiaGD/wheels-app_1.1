@@ -39,3 +39,19 @@
   outline: 2px solid var(--pale, #d2d2d2);
   outline-offset: 2px;
 }
+
+.arrow {
+  flex: none;
+  width: 9px;
+  height: 15px;
+}
+
+.left {
+  margin-right: 10px;
+}
+
+/* The svg points left; flip it for right. */
+.right {
+  margin-left: 10px;
+  transform: scaleX(-1);
+}

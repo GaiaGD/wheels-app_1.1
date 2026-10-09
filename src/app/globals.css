@@ -6,7 +6,11 @@
   --darkGrey: #222222;
   --card: #ffffff;
   --muted: #c9c9c9;
-  --radius: 12px;
+  --green: #1c991c;
+  --yellow: #ffbf00;
+  --orange: #ff8800;
+  --red: #f92020;
+  --radius: 20px;
   --shadow-black: 0 4px 14px #000;
   --shadow-glow:
     0 0 0 1px color-mix(in oklab, var(--card) 10%, transparent),

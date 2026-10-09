@@ -6,13 +6,12 @@ import styles from './AircraftInfo.module.css'
 interface Props {
   progress: number | null
   status: FlightStatus
-  countdown: string | null
   flightNumber: string
   airline: string | null
   aircraft: string | null
 }
 
-export function AircraftInfo({ progress, status, countdown, flightNumber, airline, aircraft }: Props) {
+export function AircraftInfo({ progress, status, flightNumber, airline, aircraft }: Props) {
   const position = planeFraction(status, progress)
   return (
     <section className={styles.aircraft} aria-label="Flight information">
@@ -33,7 +32,7 @@ export function AircraftInfo({ progress, status, countdown, flightNumber, airlin
           />
         )}
       </div> */}
-      {countdown && <p className={styles.countdown}>Departs in {countdown}</p>}
+      {/* {countdown && <p className={styles.countdown}>Departs in {countdown}</p>} */}
     </section>
   )
 }

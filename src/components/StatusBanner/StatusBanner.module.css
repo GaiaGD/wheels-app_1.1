@@ -2,17 +2,37 @@
   padding: 7px 14px;
   border-radius: 999px;
   background: var(--card);
-  box-shadow: var(--shadow);
+  /* box-shadow: var(--shadow); */
   font-size: 13px;
   text-align: center;
+  color: var(--darkGrey);
 }
-.in_air {
-  background: var(--green);
-  color: var(--bg);
+
+/* Each status with a border sets --glow; the border colour and the glow around it both come from it. */
+.scheduled,
+.in_air,
+.delayed,
+.diverted,
+.cancelled ,
+.landed,
+.landed_late {
+  border: 1px solid var(--glow);
+  box-shadow:
+    0 0 2px color-mix(in oklab, var(--glow) 70%, transparent),
+    0 0 8px color-mix(in oklab, var(--glow) 35%, transparent),
+    inset 0 0 6px color-mix(in oklab, var(--glow) 25%, transparent);
 }
-.delayed {
-  border: 1px solid var(--yellow);
+
+.scheduled , .in_air, .landed {
+  --glow: var(--green);
 }
-.cancelled, .diverted {
-  border: 1px dashed var(--red);
+.delayed,
+.landed_late {
+  --glow: var(--yellow);
+}
+.diverted {
+  --glow: var(--orange);
+}
+.cancelled {
+  --glow: var(--red);
 }

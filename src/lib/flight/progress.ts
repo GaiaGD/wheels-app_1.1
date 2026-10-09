@@ -14,7 +14,7 @@ export function flightProgress(f: Flight, now: Date): number | null {
 /** Where the plane sits along the route, 0..1, or null when there is no plane to show. */
 export function planeFraction(status: FlightStatus, progress: number | null): number | null {
   if (status === 'cancelled' || status === 'diverted') return null
-  if (status === 'landed') return 1
+  if (status === 'landed' || status === 'landed_late') return 1
   if (status === 'scheduled' || status === 'delayed') return 0
   return progress ?? 0.5
 }

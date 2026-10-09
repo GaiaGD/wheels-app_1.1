@@ -63,6 +63,12 @@ describe('deriveStatus', () => {
     expect(deriveStatus(late, at('2026-10-03T08:00:00Z'))).toBe('delayed')
     expect(deriveStatus(slight, at('2026-10-03T08:00:00Z'))).toBe('scheduled')
   })
+  it('reports landed late when arrival was 15+ minutes behind schedule', () => {
+    const late = flight({ rawStatus: 'Arrived', arr: ep('LHR', '2026-10-03T10:00:00Z', { actualUtc: '2026-10-03T10:25:00Z' }) })
+    const slight = flight({ rawStatus: 'Arrived', arr: ep('LHR', '2026-10-03T10:00:00Z', { actualUtc: '2026-10-03T10:05:00Z' }) })
+    expect(deriveStatus(late, noon)).toBe('landed_late')
+    expect(deriveStatus(slight, noon)).toBe('landed')
+  })
 })
 
 describe('flightProgress', () => {
