@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { DottedLink } from '@/components/DottedButton/DottedButton'
 import { ErrorState } from '@/components/ErrorState/ErrorState'
 import { FlightList } from '@/components/FlightList/FlightList'
 import { searchRouteFlights } from '@/lib/providers/aerodatabox-departures'
@@ -13,23 +13,24 @@ export default async function SearchPage({ searchParams }: Props) {
 
   if (!res.ok && res.error.kind === 'not_found') {
     return (
-      <main style={{ maxWidth: 480, margin: '0 auto', padding: '20vh 16px', textAlign: 'center', display: 'grid', gap: 16, justifyItems: 'center' }}>
+      <main className="searchResults">
         <h1 style={{ fontSize: 28 }}>No flights found</h1>
         <p style={{ fontSize: 15, margin: 0 }}>
           We couldn&apos;t find a flight on this route that departed in the last 24 hours. For an upcoming flight, search by flight number.
         </p>
-        <Link href="/" className="button">Search again</Link>
+        <DottedLink href="/">Search again</DottedLink>
       </main>
     )
   }
   if (!res.ok) return <ErrorState error={res.error} />
 
   return (
-    <main style={{ maxWidth: 600, margin: '0 auto', padding: 16, display: 'grid', gap: 16 }}>
-      <h1 style={{ fontSize: 28 }}>{res.data.length} flight{res.data.length === 1 ? '' : 's'} found</h1>
-      <p style={{ fontSize: 15, margin: 0 }}>Flights that departed in the last 24 hours</p>
+    <main className="searchResults">
+      <p style={{ fontSize: 14, margin: 0 }}>Flights that departed in the last 24 hours</p>
       <FlightList flights={res.data} />
-      <Link href="/" className="button" style={{ justifySelf: 'center' }}>Search again</Link>
+      <DottedLink className="button" href="/" arrow="left">
+        Search again
+      </DottedLink>
     </main>
   )
 }

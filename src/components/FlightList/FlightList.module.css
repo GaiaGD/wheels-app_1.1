@@ -4,6 +4,7 @@
   padding: 0;
   display: grid;
   gap: 12px;
+  width: 100%;
 }
 .list a {
   display: flex;
@@ -11,15 +12,28 @@
   align-items: center;
   padding: 18px 20px;
   border-radius: var(--radius);
-  background: var(--card);
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-black);
+  border: 1px solid var(--grey);
   font-size: 15px;
-  color: var(--bg);
+  color: var(--pale);
   text-decoration: none;
   transition: background 0.2s ease;
 }
+
+.list a > * {
+  flex: 1;
+}
+
+.flightIata {
+  text-align: left;
+}
+.time {
+  text-align: right;
+}
+
+
 .list a:hover {
-  background: #f4f4f4;
+  background: var(--darkGrey);
 }
 .list strong {
   font-size: 25px;

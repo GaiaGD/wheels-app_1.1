@@ -92,7 +92,7 @@ export function SearchForm() {
         </div>
       )}
 
-      <DottedButton type="submit">Search</DottedButton>
+      <DottedButton type="submit" arrow="right">Search</DottedButton>
     </form>
   )
 }

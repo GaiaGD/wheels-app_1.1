@@ -69,10 +69,9 @@ export function FlightView({ flight, now, departurePhoto, arrivalPhoto, departur
           <div className={styles.arrival}>
             <AirportCard role="arrival" endpoint={flight.arrival} photo={arrivalPhoto} weather={arrivalWeather} />
           </div>
-          <DottedLink href="/" className={styles.back} arrow="left">
+          <DottedLink className={styles.button} href="/" arrow="left" >
             Check another flight
           </DottedLink>
-
         </div>
       </div>
     </main>

@@ -15,9 +15,9 @@ export function FlightList({ flights }: { flights: RouteFlight[] }) {
         return (
           <li key={`${f.flightIata}-${index}`}>
             <Link href={`/flight/${encodeURIComponent(f.flightIata)}${query ? `?${query}` : ''}`}>
-              <strong>{f.flightIata}</strong>
-              <span>{f.depIata} → {f.arrIata}</span>
-              <span>{localTime(f.departureLocal) ?? '—'} · {routeStatusLabel(f.status)}</span>
+              <strong className={styles.flightIata}>{f.flightIata}</strong>
+              <span className={styles.route}>{f.depIata} → {f.arrIata}</span>
+              <span className={styles.time}>{localTime(f.departureLocal) ?? '—'} · {routeStatusLabel(f.status)}</span>
             </Link>
           </li>
         )

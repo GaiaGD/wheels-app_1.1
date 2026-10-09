@@ -2,7 +2,7 @@
   display: grid;
   gap: 30px;
   width: 100%;
-  max-width: 420px;
+  max-width: 600px;
   margin: 0 auto;
 }
 /* Two-option toggle: a pill with a thumb that slides under the selected tab (cheap: transform only). */
@@ -13,12 +13,13 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   justify-self: center;
-  width: min(100%, 320px);
+  width: 100%;
   padding: 3px;
   border: 1px solid var(--grey);
-  border-radius: 999px;
+  border-radius: var(--radius);
   color: var(--pale);
   box-shadow: var(--shadow-black);
+  min-height: 50px;
 }
 /* Dots (DotField) sit behind the thumb, which sits behind the tab labels. */
 .dots {
@@ -41,7 +42,7 @@
 }
 .tabs button {
   font: inherit;
-  font-size: 13px;
+  font-size: 14px;
   padding: 9px 14px;
   border: 0;
   border-radius: 999px;

@@ -6,7 +6,7 @@
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  min-height: 44px;
+  min-height: 50px;
   padding: 0 28px;
   border: 1px solid var(--grey);
   border-radius: 12px;
@@ -26,6 +26,18 @@
   position: relative;
 }
 
+.button:hover {
+  box-shadow: var(--shadow-glow);
+}
+
+.button:hover .right {
+  transform: scaleX(-1) translateX(-2px);
+}
+
+.button:hover .left {
+  transform: scaleX(1) translateX(-2px);
+}
+
 .button:not(:disabled):active {
   box-shadow: var(--shadow-glow);
 }
@@ -42,8 +54,10 @@
 
 .arrow {
   flex: none;
-  width: 9px;
-  height: 15px;
+  width: auto;
+  height: 12px;
+  transition: all 0.3s;
+  margin-bottom: 1px;
 }
 
 .left {

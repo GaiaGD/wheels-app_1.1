@@ -1,0 +1,50 @@
+.page {
+  min-height: 100vh;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  padding: 32px 16px;
+  text-align: center;
+}
+
+.logo {
+  max-height: 100px;
+}
+
+/* A slot grows from 0 to its content's height (and back) while fading, so the logo glides instead of jumping. */
+.slot {
+  display: grid;
+  grid-template-rows: 0fr;
+  width: 100%;
+  opacity: 0;
+  transition: grid-template-rows 0.7s ease, opacity 0.6s ease;
+}
+
+.slot[data-open='true'] {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.inner {
+  min-height: 0;
+  overflow: hidden;
+  display: grid;
+  justify-items: center;
+  padding-top: 24px;
+  /* Clip only while sliding; once open, let the form's glows spill out. */
+  transition: overflow 0s 0.7s allow-discrete;
+}
+
+.slot[data-open='true'] .inner {
+  overflow: visible;
+}
+
+.logotype {
+  max-width: 150px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slot {
+    transition: none;
+  }
+}

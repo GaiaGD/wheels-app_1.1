@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { DottedLink } from '@/components/DottedButton/DottedButton'
 import { userMessage } from '@/lib/messages'
 import type { ProviderError } from '@/lib/result'
 import { ErrorPanel } from './ErrorPanel'
@@ -13,7 +13,7 @@ export function ErrorState({ error, variant }: { error: ProviderError; variant?:
       : userMessage(error)
   return (
     <ErrorPanel title={title} body={body}>
-      <Link href="/" className="button">Search again</Link>
+      <DottedLink href="/">Search again</DottedLink>
     </ErrorPanel>
   )
 }

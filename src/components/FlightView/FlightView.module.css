@@ -36,6 +36,13 @@
   flex-shrink: 0;
 }
 
+.panel .button {
+  position: absolute;
+  bottom: 15px;
+  right: 16px;
+  width: calc(100% - 32px);
+}
+
 .departure, .arrival {
   background: var(--card);
 }
@@ -89,6 +96,14 @@
     filter: drop-shadow(0 0 20px #00000090);
   }
 
+  .panel .button {
+    position: relative;
+    bottom: auto;
+    right: auto;
+    width: auto;
+    margin-top: 16px;
+  }
+
   .departure {
     border-radius: var(--radius) var(--radius) 0 0;
   }
@@ -103,7 +118,7 @@
     flex-direction: column-reverse;
   }
   .pill {
-    top: 43%;
+    top: 42%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 2;
