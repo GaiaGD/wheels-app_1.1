@@ -69,6 +69,19 @@ describe('searchRouteFlights', () => {
     expect(res.data[2].departureLocal).toBe('2026-10-03 16:20-07:00')
   })
 
+  it('reports a departed flight as arrived once its arrival time has passed', async () => {
+    const withArrival = (number: string, arrival: object) => ({ ...item(number, 'NRT', 'NH', '2026-10-03 01:00Z'), arrival: { airport: { iata: 'NRT' }, ...arrival } })
+    stub({
+      w1: [
+        withArrival('NH 1', { scheduledTime: { utc: '2026-10-03 12:00Z' } }),
+        withArrival('NH 2', { scheduledTime: { utc: '2026-10-04 10:00Z' }, runwayTime: { utc: '2026-10-03 11:00Z' } }),
+        withArrival('NH 3', { scheduledTime: { utc: '2026-10-03 12:00Z' }, revisedTime: { utc: '2026-10-04 06:00Z' } }),
+      ],
+    })
+    const res = await searchRouteFlights(q)
+    expect(res.ok && Object.fromEntries(res.data.map((f) => [f.flightIata, f.status]))).toEqual({ NH1: 'Arrived', NH2: 'Arrived', NH3: 'Departed' })
+  })
+
   it('returns not_found when nothing matches', async () => {
     stub({ w1: [item('JL 62', 'NRT', 'JL', '2026-10-03 02:00Z')] })
     const res = await searchRouteFlights(q)

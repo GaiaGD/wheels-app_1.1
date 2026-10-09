@@ -27,7 +27,14 @@ const boardResponse = z.object({
         status: z.string().nullish(),
         airline: z.object({ iata: z.string().nullish() }).nullish(),
         departure: z.object({ scheduledTime: timeSchema }).nullish(),
-        arrival: z.object({ airport: z.object({ iata: z.string().nullish() }).nullish() }).nullish(),
+        arrival: z
+          .object({
+            airport: z.object({ iata: z.string().nullish() }).nullish(),
+            scheduledTime: timeSchema,
+            revisedTime: timeSchema,
+            runwayTime: timeSchema,
+          })
+          .nullish(),
       }),
     )
     .nullish(),
@@ -38,6 +45,25 @@ function offsetMinutes(local: string | null | undefined): number | null {
   const m = /([+-])(\d{2}):(\d{2})$/.exec(local ?? '')
   if (m) return (m[1] === '-' ? -1 : 1) * (Number(m[2]) * 60 + Number(m[3]))
   return local?.endsWith('Z') ? 0 : null
+}
+
+/** "2026-10-08 20:05Z" -> epoch ms (NaN if missing). */
+function utcMs(t: { utc?: string | null } | null | undefined): number {
+  return t?.utc ? Date.parse(t.utc.replace(' ', 'T')) : NaN
+}
+
+/** The board keeps saying "Departed" long after touchdown, so treat a departed flight as arrived
+    once it has a runway arrival time or its best arrival estimate is in the past. */
+function effectiveStatus(
+  status: string | null | undefined,
+  arrival: { scheduledTime?: { utc?: string | null } | null; revisedTime?: { utc?: string | null } | null; runwayTime?: { utc?: string | null } | null } | null | undefined,
+  now: number,
+): string | null {
+  const s = (status ?? '').toLowerCase()
+  if (s !== 'departed' && s !== 'enroute' && s !== 'approaching') return status ?? null
+  const landed = utcMs(arrival?.runwayTime) <= now
+  const estimate = utcMs(arrival?.revisedTime ?? arrival?.scheduledTime)
+  return landed || estimate <= now ? 'Arrived' : (status ?? null)
 }
 
 /** "YYYY-MM-DDTHH:mm" for a UTC instant shifted by the airport's offset. */
@@ -102,6 +128,9 @@ export async function searchRouteFlights(q: {
     if (d.airline?.iata?.toUpperCase() !== airline.data) continue
     const utc = d.departure?.scheduledTime?.utc ?? ''
     const id = `${number}|${utc}`
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[route-match]', JSON.stringify({ number, status: d.status, depUtc: utc, arr: d.arrival, duplicate: seen.has(id) }))
+    }
     if (seen.has(id)) continue
     seen.add(id)
     rows.push({
@@ -112,7 +141,7 @@ export async function searchRouteFlights(q: {
         depIata: dep.data,
         arrIata: arr.data,
         departureLocal: d.departure?.scheduledTime?.local ?? null,
-        status: d.status ?? null,
+        status: effectiveStatus(d.status, d.arrival, now),
       },
     })
   }

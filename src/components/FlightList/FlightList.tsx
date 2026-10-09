@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import type { RouteFlight } from '@/lib/flight/types'
 import { routeStatusLabel } from '@/lib/flight/route-status'
-import { localTime } from '@/lib/flight/time'
+import { localDay, localTime } from '@/lib/flight/time'
 import styles from './FlightList.module.css'
 
 export function FlightList({ flights }: { flights: RouteFlight[] }) {

@@ -16,6 +16,14 @@ export function localTime(local: string | null): string | null {
   return local && local.length >= 16 ? local.slice(11, 16) : null
 }
 
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+/** "2025-02-01 14:30+01:00" -> "1 Feb" */
+export function localDay(local: string | null): string | null {
+  const m = /^\d{4}-(\d{2})-(\d{2})/.exec(local ?? '')
+  return m ? `${Number(m[2])} ${MONTHS[Number(m[1]) - 1]}` : null
+}
+
 export function formatDuration(ms: number): string {
   const minutes = Math.max(0, Math.round(ms / 60_000))
   const h = Math.floor(minutes / 60)
