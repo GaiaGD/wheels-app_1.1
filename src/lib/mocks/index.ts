@@ -9,6 +9,7 @@ const AIRPORTS: Record<string, AirportInfo> = {
   LAX: airport('LAX', 'KLAX', 'Los Angeles International', 'Los Angeles', 'US', 33.94, -118.41),
   LHR: airport('LHR', 'EGLL', 'London Heathrow', 'London', 'GB', 51.47, -0.45),
   FRA: airport('FRA', 'EDDF', 'Frankfurt am Main', 'Frankfurt', 'DE', 50.03, 8.57),
+  SFO: airport('SFO', 'KSFO', 'San Francisco International', 'San Francisco', 'US', 37.62, -122.38),
   CDG: airport('CDG', 'LFPG', 'Paris Charles de Gaulle', 'Paris', 'FR', 49.01, 2.55),
 }
 
@@ -24,13 +25,13 @@ interface Spec {
 }
 
 const SPECS: Spec[] = [
-  { number: 'AA100', airline: ['American Airlines', 'AA'], dep: 'JFK', arr: 'LAX', startMin: -120, durMin: 360, status: 'EnRoute' },
-  { number: 'AA2', airline: ['American Airlines', 'AA'], dep: 'JFK', arr: 'LAX', startMin: -30, durMin: 360, status: 'EnRoute' },
+  { number: 'AA100', airline: ['American Airlines', 'AA'], dep: 'JFK', arr: 'LHR', startMin: -120, durMin: 360, status: 'EnRoute' },
+  { number: 'AA2', airline: ['American Airlines', 'AA'], dep: 'LAX', arr: 'JFK', startMin: -30, durMin: 360, status: 'EnRoute' },
   { number: 'BA117', airline: ['British Airways', 'BA'], dep: 'LHR', arr: 'JFK', startMin: 180, durMin: 480, status: 'Expected' },
   { number: 'LH400', airline: ['Lufthansa', 'LH'], dep: 'FRA', arr: 'JFK', startMin: -600, durMin: 500, status: 'Arrived', delayMin: 12 },
-  { number: 'DL1', airline: ['Delta Air Lines', 'DL'], dep: 'JFK', arr: 'LAX', startMin: 60, durMin: 360, status: 'Canceled' },
-  { number: 'AF11', airline: ['Air France', 'AF'], dep: 'CDG', arr: 'JFK', startMin: -200, durMin: 480, status: 'Diverted' },
-  { number: 'UA900', airline: ['United Airlines', 'UA'], dep: 'LAX', arr: 'JFK', startMin: 90, durMin: 300, status: 'Delayed', delayMin: 45 },
+  { number: 'DL1', airline: ['Delta Air Lines', 'DL'], dep: 'JFK', arr: 'LHR', startMin: 60, durMin: 360, status: 'Canceled' },
+  { number: 'AF11', airline: ['Air France', 'AF'], dep: 'JFK', arr: 'CDG', startMin: -200, durMin: 480, status: 'Diverted' },
+  { number: 'UA900', airline: ['United Airlines', 'UA'], dep: 'LHR', arr: 'SFO', startMin: 90, durMin: 300, status: 'Delayed', delayMin: 45 },
 ]
 
 const MIN = 60_000
