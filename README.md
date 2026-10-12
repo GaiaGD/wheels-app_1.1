@@ -5,8 +5,6 @@
 
 There are two deployments of the same code because they answer different questions. The live one shows the real integration, but it can't show failure states on demand and anyone's clicks use up the quota. The demo one runs in mock mode, so it is always available and every error state can be reproduced with one click.
 
-![Wheels App: flight AA100 from JFK to LAX on the map, with weather and airport photos](docs/screenshot.png)
-
 Look up any flight by flight number (past, live or upcoming) or by route, and see it on a map with its great-circle route, the weather at both airports and a photo of each.
 
 I first built this flight tracker in 2015 and rebuilt it in 2023. This is the third version, rebuilt in Next.js (App Router) with typed server-side data fetching, a map view and a real test suite.
