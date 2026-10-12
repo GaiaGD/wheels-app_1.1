@@ -1,7 +1,7 @@
 # Wheels App 1.1
 
-- **Demo (sample data): https://YOUR-DEMO-URL**: fixtures for every flight state, no API quota used. Start here.
-- **Live data: https://YOUR-LIVE-URL**: connected to the real flight API. It runs on a free plan with a small monthly limit, so if it says it is running out of flight data, that is expected.
+- **Demo (sample data): https://wheels-app-demo.vercel.app: fixtures for every flight state, no API quota used. Start here.
+- **Live data: https://www.wheelsapp.website: connected to the real flight API. It runs on a free plan with a small monthly limit, so if it says it is running out of flight data, that is expected.
 
 There are two deployments of the same code because they answer different questions. The live one shows the real integration, but it can't show failure states on demand and anyone's clicks use up the quota. The demo one runs in mock mode, so it is always available and every error state can be reproduced with one click.
 
@@ -28,15 +28,15 @@ These links only work on the **demo** deployment, which runs on fixtures (the li
 
 | Flight | What you see |
 |---|---|
-| [AA100](https://YOUR-DEMO-URL/flight/AA100) | In the air |
-| [BA117](https://YOUR-DEMO-URL/flight/BA117) | Scheduled |
-| [LH400](https://YOUR-DEMO-URL/flight/LH400) | Landed |
-| [UA900](https://YOUR-DEMO-URL/flight/UA900) | Delayed |
-| [AF11](https://YOUR-DEMO-URL/flight/AF11) | Diverted |
-| [DL1](https://YOUR-DEMO-URL/flight/DL1) | Cancelled |
-| [ER404](https://YOUR-DEMO-URL/flight/ER404) | Provider down |
-| [ER429](https://YOUR-DEMO-URL/flight/ER429) | Rate limited |
-| [JFK → LAX, American](https://YOUR-DEMO-URL/search?dep=JFK&arr=LAX&airline=AA) | Route search |
+| [AA100](https://wheels-app-demo.vercel.app/flight/AA100) | In the air |
+| [BA117](https://wheels-app-demo.vercel.app/flight/BA117) | Scheduled |
+| [LH400](https://wheels-app-demo.vercel.app/flight/LH400) | Landed |
+| [UA900](https://wheels-app-demo.vercel.app/flight/UA900) | Delayed |
+| [AF11](https://wheels-app-demo.vercel.app/flight/AF11) | Diverted |
+| [DL1](https://wheels-app-demo.vercel.app/flight/DL1) | Cancelled |
+| [ER404](https://wheels-app-demo.vercel.app/flight/ER404) | Provider down |
+| [ER429](https://wheels-app-demo.vercel.app/flight/ER429) | Rate limited |
+| [JFK → LAX, American](https://wheels-app-demo.vercel.app/search?dep=JFK&arr=LAX&airline=AA) | Route search |
 
 ## Decisions
 
